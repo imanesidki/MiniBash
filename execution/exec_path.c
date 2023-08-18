@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:26:51 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/18 02:23:43 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/18 04:47:31 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ void	ft_execve(t_cmd *data, t_env *env)
 {
 	char		**envp;
 	int			len;
-	int	i = 0;
+	int			i;
 
+	i = 0;
 	if (!data || !data->cmd || !*data->cmd)
 		return ;
 	len = lstsize(env);
@@ -54,7 +55,7 @@ void	ft_execve(t_cmd *data, t_env *env)
 		{
 			perror("minishell ");
 			exit(1);
-		}		
+		}
 	}
 }
 
@@ -109,9 +110,18 @@ void	execution(t_cmd **node, t_env *env)
 		pwd_cmd(env);
 }
 
-void	exec_cmd(t_cmd *data, t_env *env)
+void	ft_process(t_cmd *data, t_env *envp, int fd[2])
 {
-		ft_execve_valid_path(data, env);
-	// wait(0);
-	// while(wait(&pid) > 0);
+	(void)fd;
+	if (data->fd[0] != -2)
+		dup2(data->fd[0], 0);
+	if (data->fd[1] != -2)
+		dup2(data->fd[1], 1);
+	if (!is_builting(data))
+	{
+		execution(&data, envp);
+		exit(0);
+	}
+	else
+		ft_execve_valid_path(data, envp);
 }

@@ -6,53 +6,33 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:11:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/18 02:49:57 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/18 04:43:59 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ft_process(t_cmd *data, t_env *envp, int fd[2])
-{
-	// int	pid;
-
-	// pipe(fd);
-	(void)fd;
-
-		if (data->fd[0] != -2)
-			dup2(data->fd[0], 0);
-		if (data->fd[1] != -2)
-			dup2(data->fd[1], 1);
-		if (!is_builting(data))
-		{
-			execution(&data, envp);
-			exit(0);
-		}
-		else
-			ft_execve_valid_path(data, envp);
-	// wait(0);
-	// close(fd[1]);
-	// dup2(fd[0], 0);
-	// close(fd[0]);
-}
-
 void	handle(int sig)
 {
-	if(sig == SIGQUIT)
+	if (sig == SIGQUIT)
 		printf("\\Quit\n");
-	if(sig == SIGINT)
+	if (sig == SIGINT)
 	{
 		rl_catch_signals = 0;
-		return;
+		return ;
 	}
 }
 
-void redirection(t_cmd *data, t_env *envp)
+void	redirection(t_cmd *data, t_env *envp)
 {
-	int in = dup(0);
-	int	out = dup(1);
+	int	in;
+	int	out;
 	int	fd[2];
-	int pid = -1;
+	int	pid;
+
+	in = dup(0);
+	out = dup(1);
+	pid = -1;
 	signal(SIGINT, handle);
 	signal(SIGQUIT, handle);
 	if (data->next)
@@ -85,8 +65,8 @@ void redirection(t_cmd *data, t_env *envp)
 			if (data->fd[0] != -2)
 				dup2(data->fd[0], 0);
 			if (!is_builting(data))
-				return(execution(&data, envp));
-				exec_cmd(data, envp);
+				return (execution(&data, envp));
+			ft_execve_valid_path(data, envp);
 		}
 	}
 	else
@@ -95,33 +75,28 @@ void redirection(t_cmd *data, t_env *envp)
 			dup2(data->fd[1], 1);
 		if (data->fd[0] != -2)
 			dup2(data->fd[0], 0);
-		if (!is_builting(data) )
-			return(execution(&data, envp));
+		if (!is_builting(data))
+			return (execution(&data, envp));
 		else
 		{
 			pid = fork();
 			if (pid == 0)
-				exec_cmd(data, envp);
+				ft_execve_valid_path(data, envp);
 		}
 	}
-	dup2(in , 0);
-	dup2(out , 1);
-	while(wait(&pid) > 0);
+	dup2(in, 0);
+	dup2(out, 1);
+	while (wait(&pid) > 0);
 }
 
-// void	swap_list()
-// {
-
-// }
-
-t_env *lstcmp(t_env *export)
+t_env	*lstcmp(t_env *export)
 {
-	char *tmp_key;
-	char *tmp_value;
-	char *tmp_line;
-	t_env *head;
-	t_env *head_n;
-	t_env *dup_export;
+	char	*tmp_key;
+	char	*tmp_value;
+	char	*tmp_line;
+	t_env	*head;
+	t_env	*head_n;
+	t_env	*dup_export;
 
 	dup_export = duplicate_env(export);
 	head = dup_export;
@@ -146,18 +121,18 @@ t_env *lstcmp(t_env *export)
 		}
 		(head) = (head)->next;
 	}
-	head = dup_export;	
+	head = dup_export;
 	while (head)
 	{
 		if (!ft_strcmp(head->line, head->key))
 		{
-			printf("declare -x %s\n",head->key);
+			printf("declare -x %s\n", head->key);
 		}
 		else
-			printf("declare -x %s=\"%s\"\n",head->key, head->value);
+			printf("declare -x %s=\"%s\"\n", head->key, head->value);
 		head = head->next;
 	}
-	return(head);
+	return (head);
 }
 
 int	check_key(char *key)
@@ -172,13 +147,13 @@ int	check_key(char *key)
 			return (2);
 		key++;
 	}
-	return(0);
+	return (0);
 }
 
 int is_builting(t_cmd *data)
 {
 	if (!data->cmd || !data->cmd[0] || !data)
-		return(1);
+		return (1);
 	if (!ft_strcmp(*data->cmd, "echo") || !ft_strcmp(*data->cmd, "cd") ||
 	!ft_strcmp(*data->cmd, "env") || !ft_strcmp(*data->cmd, "export") ||
 	!ft_strcmp(*data->cmd, "unset") || !ft_strcmp(*data->cmd, "exit") ||
