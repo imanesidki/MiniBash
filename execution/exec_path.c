@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:26:51 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/18 01:04:25 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/18 02:23:43 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,7 @@ void	execution(t_cmd **node, t_env *env)
 
 void	exec_cmd(t_cmd *data, t_env *env)
 {
-	int	pid;
-
-	pid = fork();
-	if (pid == 0)
 		ft_execve_valid_path(data, env);
 	// wait(0);
-	while(wait(&pid) > 0);
+	// while(wait(&pid) > 0);
 }

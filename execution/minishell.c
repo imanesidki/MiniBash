@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:11:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/18 01:16:18 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/18 02:49:57 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,40 @@ void	ft_process(t_cmd *data, t_env *envp, int fd[2])
 	// close(fd[0]);
 }
 
+void	handle(int sig)
+{
+	if(sig == SIGQUIT)
+		printf("\\Quit\n");
+	if(sig == SIGINT)
+	{
+		rl_catch_signals = 0;
+		return;
+	}
+}
+
 void redirection(t_cmd *data, t_env *envp)
 {
 	int in = dup(0);
 	int	out = dup(1);
 	int	fd[2];
-	int pid;
+	int pid = -1;
+	signal(SIGINT, handle);
+	signal(SIGQUIT, handle);
 	if (data->next)
 	{
 		while (data->next)
 		{
+			pipe(fd);
 			pid = fork();
 			if (pid == 0)
 			{
-				pipe(fd);
 				close(fd[0]);
 				dup2(fd[1], 1);
 				close(fd[1]);
+				if (data->fd[1] != -2)
+					dup2(data->fd[1], 1);
+				if (data->fd[0] != -2)
+					dup2(data->fd[0], 0);
 				ft_process(data, envp, fd);
 			}
 			close(fd[1]);
@@ -60,9 +77,17 @@ void redirection(t_cmd *data, t_env *envp)
 			close(fd[0]);
 			data = data->next;
 		}
-		if (!is_builting(data))
-			return(execution(&data, envp));
-			exec_cmd(data, envp);
+		pid = fork();
+		if (pid == 0)
+		{
+			if (data->fd[1] != -2)
+				dup2(data->fd[1], 1);
+			if (data->fd[0] != -2)
+				dup2(data->fd[0], 0);
+			if (!is_builting(data))
+				return(execution(&data, envp));
+				exec_cmd(data, envp);
+		}
 	}
 	else
 	{
@@ -73,11 +98,15 @@ void redirection(t_cmd *data, t_env *envp)
 		if (!is_builting(data) )
 			return(execution(&data, envp));
 		else
-			exec_cmd(data, envp);
+		{
+			pid = fork();
+			if (pid == 0)
+				exec_cmd(data, envp);
+		}
 	}
 	dup2(in , 0);
 	dup2(out , 1);
-	while(wait(NULL) > 0);
+	while(wait(&pid) > 0);
 }
 
 // void	swap_list()

@@ -44,5 +44,6 @@ clean :
 
 fclean : clean
 	@rm -f mini.a
+	@rm -f minishell
 
 re : fclean all

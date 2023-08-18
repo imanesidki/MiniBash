@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/18 01:18:43 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/18 02:45:00 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	main(int ac, char **av, char **env)
 	// }
 	while (1)
 	{
-		// rl_catch_signals = 0
+		rl_catch_signals = 0;
 		ft_signal();
 		input = readline("minishell$ ");
 		if (!input)
@@ -65,7 +65,7 @@ int	main(int ac, char **av, char **env)
 		if (!g_glb.opn_fls)
 			g_glb.exit_status = 0; // should rather be done at (exit and echo) in execution
 	}
-	// ft_lstclear_cmd(&cmd);
-	//clear_history();
+	ft_lstclear_cmd(&cmd);
+	clear_history();
 	return (0);
 }
