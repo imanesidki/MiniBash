@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 22:50:16 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/18 00:16:51 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/19 00:46:40 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,12 @@ void	ft_lstadd_back_2(t_env **lst, t_env *new)
 	new->next = NULL;
 }
 
-int	lstsize(t_env *env)
+int	lstsize(void)
 {
-	int	i;
+	int		i;
+	t_env	*env;
 
+	env = g_glb.env;
 	i = 0;
 	while (env)
 	{

@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 04:56:37 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/18 00:47:26 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/19 00:50:16 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,19 @@ void    echo_utils(t_cmd **data, int *i, int *j)
     }
 }
 
-void	add_pwd(t_env **env)
+void	add_pwd()
 {
 	t_env *head;
 	t_env *head_1;
 
-	head = *env;
+	head = g_glb.env;
 	while (head)
     {
         if (!ft_strcmp(head->key, "OLDPWD"))
             break;
         head = head->next;
     }
-    head_1 = *env;
+    head_1 = g_glb.env;
     while (head_1)
     {
         if (!ft_strcmp(head_1->key, "PWD"))
@@ -61,10 +61,10 @@ void	add_pwd(t_env **env)
     head_1->value =  getcwd(NULL, 0);
 }
 
-int	cd_1(t_env *env)
+int	cd_1(void)
 {
 	t_env *head;
-	head = env;
+	head = g_glb.env;
 
     while (head)
     {
@@ -86,11 +86,11 @@ int	cd_1(t_env *env)
 	return (0);
 }
 
-int	cd_2(t_env *env)
+int	cd_2(void)
 {
 	t_env *head;
 
-	head = env;
+	head = g_glb.env;
 	while (head)
     {
         if (!ft_strcmp(head->key, "OLDPWD"))
@@ -100,12 +100,12 @@ int	cd_2(t_env *env)
 	if (!head)
 	{
 		ft_putstr_fd(2, "minishell: cd: OLDPWD not set\n");
-		return 1;
+		return (1);
 	}
     if (chdir(head->value) < 0)
 	{
 		perror("minishell");
-		return 1;//exit	
+		return (1);//exit	
 	}
 	printf("%s\n", head->value);
 	return (0);

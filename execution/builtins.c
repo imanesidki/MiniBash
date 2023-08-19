@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 03:46:38 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/18 00:16:54 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/19 01:12:17 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,19 @@ void	echo_cmd(t_cmd **data)
 		printf("\n");
 }
 
-void	cd_cmd(t_cmd **data, t_env *env)
+void	cd_cmd(t_cmd **data)
 {
 	(*data)->cmd++;
 	if (*(*data)->cmd)
 	{
 		if (!ft_strcmp(*(*data)->cmd, "~"))
 		{
-			if (cd_1(env) == 1)
+			if (cd_1() == 1)
 				return ;
 		}
 		else if (!ft_strcmp(*(*data)->cmd, "-"))
 		{
-			if (cd_2(env) == 1)
+			if (cd_2() == 1)
 				return ;
 		}
 		else
@@ -63,25 +63,27 @@ void	cd_cmd(t_cmd **data, t_env *env)
 				return (perror("minishell "));
 	}
 	else
-		if (cd_1(env) == 1)
+		if (cd_1() == 1)
 			return ;
-	add_pwd(&env);
+	add_pwd();
 }
 
-void	env_cmd(t_env *env)
+void	env_cmd(void)
 {
 	t_env	*head;
 
-	head = env;
+	head = g_glb.env;
+	if (!head || !head->line)
+		return;
 	while (head)
 	{
-		if (ft_strchr(head->line, '='))
+		if (head->line && ft_strchr(head->line, '='))
 			printf("%s=%s\n", head->key, head->value);
 		head = head->next;
 	}
 }
 
-void	export_cmd(t_cmd *data, t_env *env)
+void	export_cmd(t_cmd *data)
 {
 	t_env	*head;
 
@@ -90,22 +92,23 @@ void	export_cmd(t_cmd *data, t_env *env)
 	{
 		while (*data->cmd)
 		{
-			head = env;
+			head = g_glb.env;
 			keycmp(&head, data);
 			data->cmd++;
 		}
 	}
 	else
 	{
-		head = env;
+		head = g_glb.env;
 		lstcmp(head);
 	}
 }
 
-void	unset_cmd(t_cmd *data, t_env *env)
+void	unset_cmd(t_cmd *data)
 {
+	t_env *env = g_glb.env;
 	t_env *tmp;
-
+	// int m=0;
 	data->cmd++;
 	//parsing
 	if (*data->cmd)
@@ -117,48 +120,62 @@ void	unset_cmd(t_cmd *data, t_env *env)
 		// }
 			while (*data->cmd)
 			{
-				printf("--->>>>%s\n", *data->cmd);
-				if (!ft_strcmp(*data->cmd, env->key))
+				// printf("key = |%s|\n",env->key);
+				// printf("%s\t%s\n", *data->cmd, env->key);
+				if ((*data->cmd && env->key) && !ft_strcmp(*data->cmd, env->key))
 				{
+					puts("11111");
 					tmp = env;
 					env = env->next;
 					free(tmp);
 					data->cmd++;
-					continue;;
+					g_glb.env = env;
+					// continue;
 				}
-				while (env->next->next)
-				{
-					if (!ft_strcmp(*data->cmd, env->next->key))
-					{
-						tmp = env->next;
-						env->next = env->next->next;
-						free(tmp);
-						data->cmd++;
-						continue;
-					}
-					env = env->next;
-				}
-				if (!ft_strcmp(*data->cmd, env->next->key))
-				{
-					tmp = env->next;
-					env->next = NULL;
-					free(tmp);
-					data->cmd++;
-					continue;
-				}
-				data->cmd++;
-			}		
+			// 	while (env->next && data->cmd && *data->cmd)
+			// 	{
+			// 		if (*data->cmd && tmp_env->key && !ft_strcmp(*data->cmd, tmp_env->key))
+			// 		{
+			// 			puts("22222");
+			// 			tmp = tmp_env;
+			// 			tmp_env = tmp_env->next;
+			// 			free(tmp);
+			// 			data->cmd++;
+			// 			m=1;
+			// 			break;
+			// 		}
+			// 		tmp_env = tmp_env->next;
+			// 	}
+			// 	if (m==0)
+			// 	{
+			// 		if (*data->cmd && tmp_env->next->key && !ft_strcmp(*data->cmd, tmp_env->next->key))
+			// 		{
+			// 			puts("333333");
+			// 			tmp = tmp_env->next;
+			// 			tmp_env->next = NULL;
+			// 			free(tmp);
+			// 			data->cmd++;
+			// 			continue;
+			// 		}
+			// 	if (m==0)
+			// 	{
+			// 		puts("444444");
+			// 		data->cmd++;
+			// 	}
+			// }		
+		}
+		//zzzz*env = tmp_env;
 	}
 	else
 		return;
 }
 
-void	pwd_cmd(t_env *env)
+void	pwd_cmd(void)
 {
 	t_env	*head;
 	char	*pwd;
 
-	head = env;
+	head = g_glb.env;
 	pwd = getcwd(NULL, 0);
 	if (pwd)
 		printf("%s\n", pwd);

@@ -1,9 +1,20 @@
-echo -nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn ttttttt -nnnnnnnnnnnnnn
-should print -nnnnn after ttttt
-
 
 << '"l's
 minishell: syntax error near unclosed quotes
 the delimiter should be "ls and it should work
 
-line 307     :::: chdir("/Users/osarsar/");// search-->env
+< in cat | cat | cat | cat |ls
+
+env imane or osarsar
+
+HEREDOC
+
+unset
+
+NULL
+
+$$$
+
+commande not found
+line head->line
+putstr

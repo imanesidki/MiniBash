@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 18:26:24 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/18 02:43:41 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/18 22:31:52 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -893,7 +893,7 @@ void	split_cmd(t_lexer **tmp, int i, t_lexer *hold, char ***cmnd)
 	int	j;
 
 	j = 0;
-	*cmnd = (char **)ft_malloc(sizeof(char *) * (i + 1));
+	*cmnd = (char **)ft_malloc((sizeof(char *) * (i + 1))+1);//ATTENTION ZDNA 1
 	if (!(*cmnd))
 		return ; //exit
 	(*tmp) = hold;

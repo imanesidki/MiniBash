@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/18 02:45:00 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/19 01:55:36 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	char	*input;
 	t_cmd	*cmd;
-	t_env	*envp;
 	char *test;
 
 	test = malloc(1);
@@ -33,7 +32,7 @@ int	main(int ac, char **av, char **env)
 	if (env && env[0])
 	{
 		cmd->env = env;
-		envp = variable_environnement(cmd);
+		g_glb.env = variable_environnement(cmd);
 	}
 	// else
 	// {
@@ -59,7 +58,15 @@ int	main(int ac, char **av, char **env)
 		cmd = parsing(input, env);
 		if (cmd == NULL)
 			continue;
-		redirection(cmd, envp);
+		t_env *head;
+
+		head = g_glb.env;
+		while (head)
+		{
+			printf("--->%s=%s\n", head->key, head->value);
+			head = head->next;
+		}
+		redirection(cmd);
 		// if (!cmd) 
 		// 	break ;
 		if (!g_glb.opn_fls)

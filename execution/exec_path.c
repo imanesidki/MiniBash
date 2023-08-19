@@ -6,17 +6,19 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:26:51 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/18 04:47:31 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/19 01:05:50 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*find_path(t_env *env)
+char	*find_path(void)
 {
 	int	i;
+	t_env *env;
 
 	i = 0;
+	env = g_glb.env;
 	while (env)
 	{
 		if (!ft_strcmp(env->key, "PATH"))
@@ -26,16 +28,18 @@ char	*find_path(t_env *env)
 	return (NULL);
 }
 
-void	ft_execve(t_cmd *data, t_env *env)
+void	ft_execve(t_cmd *data)
 {
+	t_env		*env;
 	char		**envp;
 	int			len;
 	int			i;
 
 	i = 0;
+	env = g_glb.env;
 	if (!data || !data->cmd || !*data->cmd)
 		return ;
-	len = lstsize(env);
+	len = lstsize();
 	envp = ft_calloc(sizeof(char *), len + 1);
 	while (env)
 	{
@@ -59,29 +63,29 @@ void	ft_execve(t_cmd *data, t_env *env)
 	}
 }
 
-int	ft_execve_valid_path(t_cmd *data, t_env *env)
+int	ft_execve_valid_path(t_cmd *data)
 {
 	int		i;
 	char	*path;
 	char	**split_path;
 
 	i = 0;
-	path = find_path(env);
+	path = find_path();
 	if (!data || !data->cmd || !*data->cmd)
 		return (1);
 	if (!path)
 	{
-		if (execve(*data->cmd, data->cmd, NULL) == -1)
-		{
+		// if (execve(*data->cmd, data->cmd, NULL) == -1)
+		// {
 			perror("minishell ");
 			exit(1);
-		}
+		// }
 	}
 	split_path = ft_split(path, ':');
 	while (split_path[i])
 	{
 		data->join = ft_strjoin(split_path[i], "/");
-		ft_execve(data, env);
+		ft_execve(data);
 		i++;
 	}
 	perror("minishell ");
@@ -89,28 +93,33 @@ int	ft_execve_valid_path(t_cmd *data, t_env *env)
 	return (0);
 }
 
-void	execution(t_cmd **node, t_env *env)
+void	execution(t_cmd **node)
 {
 	t_cmd	*data;
-
 	data = *node;
 	if (!data || !data->cmd || !data->cmd[0])
 		return ;
 	if (data->cmd && *data->cmd && !ft_strcmp(*data->cmd, "echo"))
 		echo_cmd(&data);
 	else if (!ft_strcmp(*data->cmd, "cd"))
-		cd_cmd(&data, env);
+		cd_cmd(&data);
 	else if (!ft_strcmp(*data->cmd, "env"))
-		env_cmd(env);
+		env_cmd();
 	else if (!ft_strcmp(*data->cmd, "export"))
-		export_cmd(data, env);
+		export_cmd(data);
 	else if (!ft_strcmp(*data->cmd, "unset"))
-		unset_cmd(data, env);
+		unset_cmd(data);
+	// while (env)
+	// {
+	// 	printf("----->%s\n", env->key);
+	// 	env = env->next;
+	// }
 	else if (!ft_strcmp(*data->cmd, "pwd"))
-		pwd_cmd(env);
+		pwd_cmd();
+	return;
 }
 
-void	ft_process(t_cmd *data, t_env *envp, int fd[2])
+void	ft_process(t_cmd *data, int fd[2])
 {
 	(void)fd;
 	if (data->fd[0] != -2)
@@ -119,9 +128,9 @@ void	ft_process(t_cmd *data, t_env *envp, int fd[2])
 		dup2(data->fd[1], 1);
 	if (!is_builting(data))
 	{
-		execution(&data, envp);
+		execution(&data);
 		exit(0);
 	}
 	else
-		ft_execve_valid_path(data, envp);
+		ft_execve_valid_path(data);
 }

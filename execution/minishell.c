@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:11:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/18 04:43:59 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/19 01:56:33 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	handle(int sig)
 	}
 }
 
-void	redirection(t_cmd *data, t_env *envp)
+int	redirection(t_cmd *data)
 {
 	int	in;
 	int	out;
@@ -39,6 +39,11 @@ void	redirection(t_cmd *data, t_env *envp)
 	{
 		while (data->next)
 		{
+			if (data->fd[0] == -1 || data->fd[1] == -1)
+			{
+				data = data->next;
+				continue;
+			}
 			pipe(fd);
 			pid = fork();
 			if (pid == 0)
@@ -46,17 +51,15 @@ void	redirection(t_cmd *data, t_env *envp)
 				close(fd[0]);
 				dup2(fd[1], 1);
 				close(fd[1]);
-				if (data->fd[1] != -2)
-					dup2(data->fd[1], 1);
-				if (data->fd[0] != -2)
-					dup2(data->fd[0], 0);
-				ft_process(data, envp, fd);
+				ft_process(data, fd);
 			}
 			close(fd[1]);
 			dup2(fd[0], 0);
 			close(fd[0]);
 			data = data->next;
 		}
+		if (data->fd[0] == -1 || data->fd[1] == -1 )
+			return (dup2(in, 0), dup2(out, 1), 0);
 		pid = fork();
 		if (pid == 0)
 		{
@@ -65,28 +68,40 @@ void	redirection(t_cmd *data, t_env *envp)
 			if (data->fd[0] != -2)
 				dup2(data->fd[0], 0);
 			if (!is_builting(data))
-				return (execution(&data, envp));
-			ft_execve_valid_path(data, envp);
+				return (execution(&data), exit(g_glb.exit_status), 0);
+			ft_execve_valid_path(data);
 		}
 	}
 	else
 	{
+		if (data->fd[0] == -1 || data->fd[1] == -1)
+			return(dup2(in, 0), dup2(out, 1), 0);		
 		if (data->fd[1] != -2)
 			dup2(data->fd[1], 1);
 		if (data->fd[0] != -2)
 			dup2(data->fd[0], 0);
 		if (!is_builting(data))
-			return (execution(&data, envp));
+		{
+			 ((execution(&data),dup2(in, 0), dup2(out,1)));
+			  puts("hnaaaaaaaaaaaaaaaaaa");	
+				// 			while (envp)
+				// {
+				// 	printf("%s\n", (envp)->key);
+				// 	(envp) = (envp)->next;
+				// }
+			return(1);
+		}
 		else
 		{
 			pid = fork();
 			if (pid == 0)
-				ft_execve_valid_path(data, envp);
+				ft_execve_valid_path(data);
 		}
 	}
 	dup2(in, 0);
-	dup2(out, 1);
+	dup2(out, 1);	
 	while (wait(&pid) > 0);
+	return(0);
 }
 
 t_env	*lstcmp(t_env *export)
@@ -150,6 +165,21 @@ int	check_key(char *key)
 	return (0);
 }
 
+int	check_error(char *key, t_cmd *head)
+{
+	if (!key)
+	{
+		printf("minishell: export: `%s': not a valid identifier\n", *head->cmd);
+		return(-1);
+	}
+	if (check_key(key) == -1)
+	{
+		printf("minishell: export: `%s': not a valid identifier\n", *head->cmd);
+		return(-1);
+	}
+	return (0);
+}
+
 int is_builting(t_cmd *data)
 {
 	if (!data->cmd || !data->cmd[0] || !data)
@@ -174,15 +204,15 @@ int	keycmp(t_env **export, t_cmd *head)
 	headexp = *export;
 	value = ft_value(*head->cmd);
 	key = ft_substr(*head->cmd, 0, ft_strlen(*head->cmd) - ft_strlen(value));
-	if (check_key(key) == -1)
-	{
-		printf("minishell: export: `%s': not a valid identifier\n", *head->cmd);
-		return(-1);
-	}
+	printf("value---->%s\n",value);
+	printf("key---->%s\n",key);
+	if (check_error(key, head) == -1)
+		return (-1);
 	else if (check_key(key) == 1)
 	{
 		i = 1;
 		key = ft_substr(*head->cmd, 0, ft_strlen(*head->cmd) - ft_strlen(value) - 2);
+		printf("--->key = %s", key);
 	}
 	else if (check_key(key) == 2)
 	{
@@ -193,12 +223,12 @@ int	keycmp(t_env **export, t_cmd *head)
 	{
 		key = *head->cmd;
 	}
+	//printf("key[]---->%s\n", key);
 	path = key;
 	while (*path)
 	{
 		if (!ft_isalpha(*path))
 		{
-			printf("path = %s\n", path);
 			printf("minishell: export: `%s': not a valid identifier\n", *head->cmd);
 			return (-1);
 		}

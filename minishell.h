@@ -79,10 +79,11 @@ typedef struct s_lexer
 
 typedef struct s_glb
 {
-	int	exit_status;
-	int	dqu;
-	int	sg;
-	int	opn_fls;
+	int		exit_status;
+	int		dqu;
+	int		sg;
+	int		opn_fls;
+	t_env	*env;
 }	t_glb;
 
 typedef struct s_garbage t_garbage;
@@ -104,32 +105,33 @@ t_env	*ft_lstnew_2(void *content, void *key, void *value);
 void	ft_lstadd_back_2(t_env **lst, t_env *new);
 int		ft_isalpha(int c);
 void	echo_cmd(t_cmd **data);
-void	cd_cmd(t_cmd **data, t_env *env);
-void	env_cmd(t_env *env);
-void	export_cmd(t_cmd *data, t_env *env);
-void	pwd_cmd(t_env *env);
-void	unset_cmd(t_cmd *data, t_env *env);
+void	cd_cmd(t_cmd **data);
+void	env_cmd(void);
+void	export_cmd(t_cmd *data);
+void	pwd_cmd(void);
+int	check_error(char *key, t_cmd *head);
+void	unset_cmd(t_cmd *data);
 void	echo_utils(t_cmd **data, int *i, int *j);
-void	add_pwd(t_env **env);
-int		cd_1(t_env *env);
-int		cd_2(t_env *env);
+void	add_pwd(void);
+int		cd_1(void);
+int		cd_2(void);
 int		unset_parsing(char *str);
 int		is_builting(t_cmd *data);
 //=============================================>>>>>>>>>>>>>>>>>>>>
 t_env   *duplicate_env(t_env *export);
 char	*ft_value(char *str);
 char	*ft_strchr(const char *s, int c);
-char	*find_path(t_env *env);
-int		ft_execve_valid_path(t_cmd *data, t_env *env);
-void	ft_execve(t_cmd *data, t_env *env);
+char	*find_path(void);
+int		ft_execve_valid_path(t_cmd *data);
+void	ft_execve(t_cmd *data);
 void	*ft_calloc(size_t count, size_t size);
 t_env	*variable_environnement(t_cmd *data);
 int		keycmp(t_env **export, t_cmd *head);
 t_env	*lstcmp(t_env *export);
-void	exec_cmd(t_cmd *data, t_env *env);
-void	execution(t_cmd **cmd, t_env *env);
-void	redirection(t_cmd *data, t_env *envp);
-void	ft_process(t_cmd *data, t_env *envp, int fd[2]);
+void	exec_cmd(t_cmd *data);
+void	execution(t_cmd **cmd);
+int		redirection(t_cmd *data);
+void	ft_process(t_cmd *data, int fd[2]);
 /*************************************************/
 t_token	which_token(char c1, char c2);
 void	ft_lstclear_garbage(t_garbage **lst);
@@ -159,7 +161,7 @@ void	ft_lstclear_env(t_env **lst);
 void	ft_check_expand_in_line(char **line, t_env **env_list);
 t_lexer	*ft_lstnew_lex(char *cmd, t_token token);
 void	ft_lstclear_lex(t_lexer **lst);
-int		lstsize(t_env *env);
+int		lstsize();
 char	**ft_split(char const *s, char c);
 void	empty_string(t_lexer **l, t_lexer *hold, t_token tok);
 void	ft_lstadd_back_lex(t_lexer **lst, t_lexer *new);
