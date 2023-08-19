@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 03:46:38 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/19 01:12:17 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/19 05:24:04 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,22 +85,23 @@ void	env_cmd(void)
 
 void	export_cmd(t_cmd *data)
 {
-	t_env	*head;
+	char	*key;
+	char	*value;
 
 	data->cmd++;
 	if (*data->cmd)
 	{
 		while (*data->cmd)
 		{
-			head = g_glb.env;
-			keycmp(&head, data);
+			value = ft_value(*data->cmd);
+			key = ft_substr(*data->cmd, 0, ft_strlen(*data->cmd) - ft_strlen(value));
+			keycmp(data, key, value);
 			data->cmd++;
 		}
 	}
 	else
 	{
-		head = g_glb.env;
-		lstcmp(head);
+		lstcmp();
 	}
 }
 

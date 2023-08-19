@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/19 01:55:36 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/19 21:00:05 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,7 @@ int	main(int ac, char **av, char **env)
 	g_glb.dqu = 0;
 	g_glb.opn_fls = 0;
 	if (env && env[0])
-	{
-		cmd->env = env;
-		g_glb.env = variable_environnement(cmd);
-	}
-	// else
-	// {
-	// 	envp = variable_environnement(NULL);//HERE
-	// }
+		variable_environnement(env);
 	while (1)
 	{
 		rl_catch_signals = 0;
@@ -58,14 +51,6 @@ int	main(int ac, char **av, char **env)
 		cmd = parsing(input, env);
 		if (cmd == NULL)
 			continue;
-		t_env *head;
-
-		head = g_glb.env;
-		while (head)
-		{
-			printf("--->%s=%s\n", head->key, head->value);
-			head = head->next;
-		}
 		redirection(cmd);
 		// if (!cmd) 
 		// 	break ;

@@ -25,6 +25,7 @@ SRCS =	main.c				\
 		parsing/linked_list_lexer.c	\
 		execution/builtins.c			\
 		execution/builtins_utils.c			\
+		execution/key_and_value.c			\
 
 READLINE = $(shell brew --prefix readline)
 NAME = mini.a

@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 20:23:56 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/18 00:16:35 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/19 21:02:38 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_strlen_2(char **str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -24,53 +24,78 @@ int	ft_strlen_2(char **str)
 	return (i - 1);
 }
 
-char *ft_value(char *str)
+char	*ft_value(char *str)
 {
-	char *value;
+	char	*value;
+	int		i;
 
+	i = 0;
 	value = str;
 	while (*value++ != '=' && *value)
-	{}
-	return(value);
+	{
+		i++;
+	}
+	return (value);
 }
 
-t_env *variable_environnement(t_cmd *data)
+char	**env_to_char(void)
 {
 	t_env	*env;
+	char	**str;
+	int		len;
+	int		i;
+
+	i = 0;
+	env = g_glb.env;
+	len = lstsize();
+	str = ft_calloc(sizeof(char *), len + 1);
+	while (env)
+	{
+		str[i] = ft_strjoin(env->key, "=");
+		str[i] = ft_strjoin(str[i], env->value);
+		env = env->next;
+		i++;
+	}
+	return (str);
+}
+
+t_env	*variable_environnement(char **envp)
+{
 	t_env	*tab;
 	char	*value;
 	char	*key;
-	int i;
+	int		i;
 
 	i = 1;
-	value = ft_value(data->env[0]);
-	key = ft_substr(data->env[0], 0, ft_strlen(data->env[0]) - ft_strlen(value) - 1);
-	env = ft_lstnew_2(data->env[0], key, value);
-	while (data->env[i])
+	value = ft_value(envp[0]);
+	key = ft_substr(envp[0], 0, ft_strlen(envp[0]) - ft_strlen(value) - 1);
+	g_glb.env = ft_lstnew_2(envp[0], key, value);
+	while (envp[i])
 	{
-		value = ft_value(data->env[i]);
-		key = ft_substr(data->env[i], 0, ft_strlen(data->env[i]) - ft_strlen(value) - 1);
-		tab = ft_lstnew_2(data->env[i], key, value);
-		ft_lstadd_back_2(&env, tab);
+		value = ft_value(envp[i]);
+		key = ft_substr(envp[i], 0, ft_strlen(envp[i]) - ft_strlen(value) - 1);
+		tab = ft_lstnew_2(envp[i], key, value);
+		ft_lstadd_back_2(&g_glb.env, tab);
 		// free(tab);
 		i++;
 	}
-	return(env);
+	return (tab);
 }
 
-t_env *duplicate_env(t_env *export)
+t_env	*duplicate_env(void)
 {
 	t_env	*tab;
 	t_env	*str;
+	t_env	*head;
 
-	str = ft_lstnew_2(export->line, export->key, export->value);
-	export = export->next;
-	while (export)
+	str = ft_lstnew_2(g_glb.env->line, g_glb.env->key, g_glb.env->value);
+	head = g_glb.env->next;
+	while (head)
 	{
-		tab = ft_lstnew_2(export->line, export->key, export->value);
+		tab = ft_lstnew_2(head->line, head->key, head->value);
 		ft_lstadd_back_2(&str, tab);
 		// free(tab);
-		export = export->next;
+		head = head->next;
 	}
-	return(str);
+	return (str);
 }

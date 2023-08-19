@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:11:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/19 01:56:33 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/19 20:11:16 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,7 @@ int	redirection(t_cmd *data)
 			dup2(data->fd[0], 0);
 		if (!is_builting(data))
 		{
-			 ((execution(&data),dup2(in, 0), dup2(out,1)));
-			  puts("hnaaaaaaaaaaaaaaaaaa");	
-				// 			while (envp)
-				// {
-				// 	printf("%s\n", (envp)->key);
-				// 	(envp) = (envp)->next;
-				// }
+			((execution(&data),dup2(in, 0), dup2(out,1)));
 			return(1);
 		}
 		else
@@ -104,16 +98,16 @@ int	redirection(t_cmd *data)
 	return(0);
 }
 
-t_env	*lstcmp(t_env *export)
+t_env	*lstcmp()
 {
 	char	*tmp_key;
 	char	*tmp_value;
 	char	*tmp_line;
 	t_env	*head;
 	t_env	*head_n;
-	t_env	*dup_export;
+	t_env	*dup_export = NULL;
 
-	dup_export = duplicate_env(export);
+	dup_export = duplicate_env();
 	head = dup_export;
 	while ((head)->next)
 	{
@@ -192,73 +186,6 @@ int is_builting(t_cmd *data)
 	return (1);
 }
 
-int	keycmp(t_env **export, t_cmd *head)
-{
-	t_env	*headexp;
-	t_env	*tab;
-	char	*key;
-	char	*path;
-	char	*value;
-	int		i;
-
-	headexp = *export;
-	value = ft_value(*head->cmd);
-	key = ft_substr(*head->cmd, 0, ft_strlen(*head->cmd) - ft_strlen(value));
-	printf("value---->%s\n",value);
-	printf("key---->%s\n",key);
-	if (check_error(key, head) == -1)
-		return (-1);
-	else if (check_key(key) == 1)
-	{
-		i = 1;
-		key = ft_substr(*head->cmd, 0, ft_strlen(*head->cmd) - ft_strlen(value) - 2);
-		printf("--->key = %s", key);
-	}
-	else if (check_key(key) == 2)
-	{
-		i = 2;
-		key = ft_substr(*head->cmd, 0, ft_strlen(*head->cmd) - ft_strlen(value) - 1);
-	}
-	else
-	{
-		key = *head->cmd;
-	}
-	//printf("key[]---->%s\n", key);
-	path = key;
-	while (*path)
-	{
-		if (!ft_isalpha(*path))
-		{
-			printf("minishell: export: `%s': not a valid identifier\n", *head->cmd);
-			return (-1);
-		}
-		path++;
-	}
-	while (headexp)
-	{
-		if (!ft_strcmp(headexp->key, key))
-		{
-			if (i == 2)    //x=p
-			{
-				headexp->value = value;
-				headexp->line = *head->cmd;
-				return (0);
-			}
-			else if (i == 1)//x+=p
-			{
-				headexp->value = ft_strjoin(headexp->value, value);
-				headexp->line = *head->cmd;
-				return (0);
-			}
-			else
-				return (0);
-		}
-		headexp = headexp->next;
-	}
-	tab = ft_lstnew_2(*head->cmd, key, value);
-	ft_lstadd_back_2(export, tab);
-	return (0);
-}
 
 // int	main(int ac, char **av, char **envp)
 // {

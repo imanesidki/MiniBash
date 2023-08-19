@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:26:51 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/19 01:05:50 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/19 20:03:36 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	*find_path(void)
 {
-	int	i;
-	t_env *env;
+	int		i;
+	t_env	*env;
 
 	i = 0;
 	env = g_glb.env;
@@ -30,28 +30,19 @@ char	*find_path(void)
 
 void	ft_execve(t_cmd *data)
 {
-	t_env		*env;
-	char		**envp;
-	int			len;
-	int			i;
+	char	**envp;
 
-	i = 0;
-	env = g_glb.env;
 	if (!data || !data->cmd || !*data->cmd)
 		return ;
-	len = lstsize();
-	envp = ft_calloc(sizeof(char *), len + 1);
-	while (env)
-	{
-		envp[i++] = ft_strdup(env->line);
-		env = env->next;
-	}
+	envp = env_to_char();
 	if (ft_strchr(*data->cmd, '/'))
+	{
 		if (access(*data->cmd, F_OK) == 0)
 		{
 			execve(*data->cmd, data->cmd, envp);
 			exit(1);
 		}
+	}
 	data->join = ft_strjoin(data->join, *data->cmd);
 	if (access(data->join, F_OK) == 0)
 	{
@@ -75,11 +66,8 @@ int	ft_execve_valid_path(t_cmd *data)
 		return (1);
 	if (!path)
 	{
-		// if (execve(*data->cmd, data->cmd, NULL) == -1)
-		// {
-			perror("minishell ");
-			exit(1);
-		// }
+		perror("minishell ");
+		exit(1);
 	}
 	split_path = ft_split(path, ':');
 	while (split_path[i])
@@ -96,6 +84,7 @@ int	ft_execve_valid_path(t_cmd *data)
 void	execution(t_cmd **node)
 {
 	t_cmd	*data;
+
 	data = *node;
 	if (!data || !data->cmd || !data->cmd[0])
 		return ;
@@ -109,14 +98,9 @@ void	execution(t_cmd **node)
 		export_cmd(data);
 	else if (!ft_strcmp(*data->cmd, "unset"))
 		unset_cmd(data);
-	// while (env)
-	// {
-	// 	printf("----->%s\n", env->key);
-	// 	env = env->next;
-	// }
 	else if (!ft_strcmp(*data->cmd, "pwd"))
 		pwd_cmd();
-	return;
+	return ;
 }
 
 void	ft_process(t_cmd *data, int fd[2])
