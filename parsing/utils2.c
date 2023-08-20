@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 18:26:24 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/20 05:43:20 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/20 07:00:39 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -350,28 +350,11 @@ void	delete_quotes(t_lexer** head)
 	delete_consctv_spaces(head);
 }
 
-void	env_to_map(char **env, t_env **env_list)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	while (env[i])
-	{
-		j = 0;
-		while (env[i][j] != '=')
-			j++;
-		ft_lstadd_back_env(env_list, ft_lstnew_env(ft_substr(env[i], 0, j),
-				ft_substr(env[i], j + 1, ft_strlen(env[i]) - j)));
-		i++;
-	}
-}
-
-void	ft_check_env(t_lexer **head, t_lexer *dlr_ptr, t_env **env_list)
+void	ft_check_env(t_lexer **head, t_lexer *dlr_ptr)
 {
 	char	*value;
 
-	value = ft_split_concat_dqu_dlr(-1, dlr_ptr->cmd, env_list);
+	value = ft_split_concat_dqu_dlr(-1, dlr_ptr->cmd);
 	if (value)
 	{
 		ft_free(dlr_ptr->cmd);
@@ -381,11 +364,11 @@ void	ft_check_env(t_lexer **head, t_lexer *dlr_ptr, t_env **env_list)
 		ft_delete_node(head, dlr_ptr);
 }
 
-char	*ft_env_var(char *var, t_env **env_list)
+char	*ft_env_var(char *var)
 {
 	t_env	*temp;
 
-	temp = *env_list;
+	temp = g_glb.env;
 	while (temp)
 	{
 		if (!ft_strcmp(var, temp->key))
@@ -410,7 +393,7 @@ int	is_identifier(char c)
 	return (0);
 }
 
-char	*concat_var(char *wrd_expd, int i, int j, t_env **env_list, char *var)
+char	*concat_var(char *wrd_expd, int i, int j, char *var)
 {
 	char	*concatenated;
 	char	*first_sub;
@@ -423,9 +406,9 @@ char	*concat_var(char *wrd_expd, int i, int j, t_env **env_list, char *var)
 	last_sub = ft_substr(wrd_expd, i, ft_strlen(wrd_expd) - i);
 	if (!first_sub || !var || !last_sub)
 		return (NULL);
-	if (ft_env_var(var, env_list))
+	if (ft_env_var(var))
 	{
-		concatenated = ft_strjoin(first_sub, ft_env_var(var, env_list));
+		concatenated = ft_strjoin(first_sub, ft_env_var(var));
 		concatenated = ft_strjoin(concatenated, last_sub);
 	}
 	else if (!*first_sub && !*last_sub)
@@ -435,7 +418,7 @@ char	*concat_var(char *wrd_expd, int i, int j, t_env **env_list, char *var)
 	return (concatenated);
 }
 
-char	*ft_split_concat_dqu_dlr(int i, char *wrd_expd, t_env **env_list)
+char	*ft_split_concat_dqu_dlr(int i, char *wrd_expd)
 {
 	int		j;
 	char	*concatenated;
@@ -451,12 +434,12 @@ char	*ft_split_concat_dqu_dlr(int i, char *wrd_expd, t_env **env_list)
 				ft_substr(wrd_expd, i + 1, ft_strlen(wrd_expd) - i));
 		return (concatenated);
 	}
-	concatenated = concat_var(wrd_expd, i, j, env_list, var);
+	concatenated = concat_var(wrd_expd, i, j, var);
 	ft_free(var);
 	return (concatenated);
 }
 
-void	look_for_dlr(t_lexer *tmp, t_env **env_list)
+void	look_for_dlr(t_lexer *tmp)
 {
 	int		i;
 	char	*concatenated;
@@ -468,7 +451,7 @@ void	look_for_dlr(t_lexer *tmp, t_env **env_list)
 		{
 			if (tmp->cmd[i] == '$' && tmp->cmd[i + 1] != '$')
 			{
-				concatenated = ft_split_concat_dqu_dlr(i, tmp->cmd, env_list);
+				concatenated = ft_split_concat_dqu_dlr(i, tmp->cmd);
 				ft_free(tmp->cmd);
 				tmp->cmd = concatenated;
 			}
@@ -479,13 +462,13 @@ void	look_for_dlr(t_lexer *tmp, t_env **env_list)
 	}
 }
 
-void	ft_expand(t_lexer **head, char **env, t_env **env_list)
+void	ft_expand(t_lexer **head)
 {
 	t_lexer	*tmp;
 	t_lexer	*current;
 
 	tmp = *head;
-	env_to_map(env, env_list);
+	// env_to_map(env, env_list);
 	while (tmp)
 	{
 		current = tmp->next;
@@ -501,7 +484,7 @@ void	ft_expand(t_lexer **head, char **env, t_env **env_list)
 			if (current->token == WORD)
 			{
 				ft_delete_node(head, tmp);
-				ft_check_env(head, current, env_list);
+				ft_check_env(head, current);
 			}
 		}
 		if (tmp->token == DLR && tmp->next && tmp->next->token == DLR)
@@ -517,7 +500,7 @@ void	ft_expand(t_lexer **head, char **env, t_env **env_list)
 		else if (tmp->token == DLR && !tmp->next)
 			tmp->token = WORD;
 		else if (tmp->token == DQU)
-			look_for_dlr(tmp, env_list);
+			look_for_dlr(tmp);
 		tmp = tmp->next;
 	}
 }
@@ -595,7 +578,7 @@ void	handle_delete_node(t_lexer **head, t_lexer *node)
 	if (!node->next && !node->prev) 
 		*head = NULL;
 	ft_free(node->cmd);
-	ft_free(node);
+	// ft_free(node);
 }
 
 void	ft_delete_node(t_lexer **head, t_lexer *node)
@@ -605,7 +588,7 @@ void	ft_delete_node(t_lexer **head, t_lexer *node)
 	temp = *head;
 	while (temp)
 	{
-		if (temp == node && node)
+		if (node && temp == node)
 		{
 			handle_delete_node(head, node);
 			break ;
@@ -615,7 +598,7 @@ void	ft_delete_node(t_lexer **head, t_lexer *node)
 	}
 }
 
-void	ft_check_expand_in_line(char **line,  t_env **env_list)
+void	ft_check_expand_in_line(char **line)
 {
 	int		i;
 	char	*lin;
@@ -627,7 +610,7 @@ void	ft_check_expand_in_line(char **line,  t_env **env_list)
 	{
 		if (lin[i] == '$' && lin[i + 1] != '$')
 		{
-			concat = ft_split_concat_dqu_dlr(i, lin, env_list);
+			concat = ft_split_concat_dqu_dlr(i, lin);
 			ft_free(lin);
 			lin = concat;
 			i = -1;
@@ -648,13 +631,14 @@ void	ft_sig_handler(int sig)
 	}
 }
 
-int	ft_heredoc(t_lexer **head, char **env, t_env **env_list)
+int	ft_heredoc(t_lexer **head)
 {
 	char	*line;
 	int		fds[2];
 	t_lexer	*tmp;
 	t_lexer	*loop;
 	int		fd_return;
+
 
 	loop = *head;
 	tmp = NULL;
@@ -671,7 +655,7 @@ int	ft_heredoc(t_lexer **head, char **env, t_env **env_list)
 				g_glb.exit_status = 1;
 				return (1);
 			}
-			env_to_map(env, env_list);
+			// env_to_map(env, env_list);
 			line = readline("> ");
 			if (!line)
 			{
@@ -682,7 +666,7 @@ int	ft_heredoc(t_lexer **head, char **env, t_env **env_list)
 			while (line && ft_strcmp(line, tmp->cmd) && !tt)
 			{
 				if (!g_glb.dqu)
-					ft_check_expand_in_line(&line, env_list);
+					ft_check_expand_in_line(&line);
 				write(fds[1], line, ft_strlen(line));
 				write(fds[1], "\n", 1);
 				ft_free(line);
@@ -691,7 +675,7 @@ int	ft_heredoc(t_lexer **head, char **env, t_env **env_list)
 			ft_free (line);
 			if (g_glb.sg == 1)
 				return(-1);
-			ft_lstclear_env(env_list);
+			// ft_lstclear_env(env_list);
 			g_glb.dqu = 0;
 			close(fds[1]);
 			fd_return = fds[0];
@@ -993,9 +977,9 @@ void	ft_free(void *ptr)
 	{
 		if (grb->ptr == ptr)
 		{
-			if  (grb->is_freed == 0)
+			if (grb->is_freed == 0)
 			{
-				//free(ptr);
+				free(ptr);
 				grb->is_freed = 1;
 			}
 		}
@@ -1091,22 +1075,14 @@ void	ft_signal(void)
 	}
 }
 
-void	free_memo(t_lexer **l, t_env **list_env)
-{
-	ft_lstclear_lex(l);
-	ft_lstclear_env(list_env);
-}
-
-t_cmd	*parsing(char *input, char **env)   //delete check after ft_malloc to exit
+t_cmd	*parsing(char *input)   //delete check after ft_malloc to exit
 {
 	char	*s;
 	t_lexer	*l;
-	t_env	*list_env;
 	t_cmd	*cmd;
 	int		fd_in_herdoc;
 	
 	l = NULL;
-	list_env = NULL;
 	cmd = NULL;
 	s = ft_strtrim(input, " \t\v\n\r\f");
 	ft_free(input);
@@ -1118,7 +1094,7 @@ t_cmd	*parsing(char *input, char **env)   //delete check after ft_malloc to exit
 		return (NULL);
 	}
 	delete_quotes(&l);
-	fd_in_herdoc = ft_heredoc(&l, env, &list_env);
+	fd_in_herdoc = ft_heredoc(&l);
 	if (fd_in_herdoc == -1)
 	{
 		ft_lstclear_lex(&l);
@@ -1130,14 +1106,15 @@ t_cmd	*parsing(char *input, char **env)   //delete check after ft_malloc to exit
 		ft_lstclear_lex(&l);
 		return (NULL);
 	}
-	ft_expand(&l, env, &list_env);
+	// print_linked_list(&l);
+	ft_expand(&l);
 	ft_split_pipe(&l, &cmd);
 	redirections(&l, &cmd, fd_in_herdoc);
-	// print_linked_list(&l);
 	// print_cmd_linked_list(&cmd);
-	free_memo(&l, &list_env);
+	ft_lstclear_lex(&l);
 	return (cmd);
 }
+
 //${USER} => expand
 //ambiguous redirect : 
 //bash-3.2$ echo hello > $NONEXISTENT

@@ -31,7 +31,7 @@ SRCS =	main.c				\
 
 READLINE = $(shell brew --prefix readline)
 NAME = mini.a
-FLAGS = -Wall -Werror -Wextra -I$(READLINE)/include -g -fsanitize=address
+FLAGS = -Wall -Werror -Wextra -I$(READLINE)/include #-g -fsanitize=address
 %.o : %.c minishell.h
 	@echo "Compiling: $<"
 	@cc $(FLAGS)  -c $< -o $@
