@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:11:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/20 01:06:16 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/20 04:38:20 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	redirection(t_cmd *data)
 	int	out;
 	int	fd[2];
 	int	pid;
+	int i = 0;
 
 	in = dup(0);
 	out = dup(1);
@@ -40,18 +41,18 @@ int	redirection(t_cmd *data)
 		while (data->next)
 		{
 			if (data->fd[0] == -1 || data->fd[1] == -1)
-			{
-				data = data->next;
-				continue;
-			}
-			pipe(fd);
-			pid = fork();
-			if (pid == 0)
-			{
-				close(fd[0]);
-				dup2(fd[1], 1);
-				close(fd[1]);
-				ft_process(data, fd);
+				i = 1;
+			if (i == 0)
+			{	
+				pipe(fd);
+				pid = fork();
+				if (pid == 0)
+				{
+					close(fd[0]);
+					dup2(fd[1], 1);
+					close(fd[1]);
+					ft_process(data, fd);
+				}
 			}
 			close(fd[1]);
 			dup2(fd[0], 0);

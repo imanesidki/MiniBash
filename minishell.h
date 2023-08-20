@@ -95,7 +95,7 @@ struct s_garbage
 	t_garbage	*next;
 };
 
-extern	t_glb g_glb;
+t_glb g_glb;
 //=========================================================//
 // int		ft_atoi(char *str);
 t_cmd	*ft_lstnew_1(void *content, t_cmd *data);

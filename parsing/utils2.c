@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 18:26:24 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/18 22:31:52 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/20 05:43:20 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -660,7 +660,7 @@ int	ft_heredoc(t_lexer **head, char **env, t_env **env_list)
 	tmp = NULL;
 	while (loop)
 	{
-	int tt = 0;
+		int tt = 0;
 		g_glb.sg = 0;
 		tmp = ft_heredoc_delimiter(&loop);
 		signal(SIGINT, ft_sig_handler);

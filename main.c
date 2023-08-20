@@ -6,13 +6,12 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/19 21:00:05 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/20 05:43:32 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_glb	g_glb;
 
 int	main(int ac, char **av, char **env)
 {
