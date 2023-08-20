@@ -18,3 +18,5 @@ $$$
 commande not found
 line head->line
 putstr
+
+exit

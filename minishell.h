@@ -118,6 +118,14 @@ int		cd_1(void);
 int		cd_2(void);
 int		unset_parsing(char *str);
 int		is_builting(t_cmd *data);
+void    echo_utils_ex(t_cmd **data, int *i);
+void	unset_first(t_cmd **data);
+void	unset_middle_ex(t_cmd **data, t_env *head, int *m);
+void	unset_last(t_cmd **data, t_env **head);
+int		parsing_unset(t_cmd **data);
+void	ft_put_str_error(char *arg);
+void	unset_middle(t_cmd **data, t_env **env, int *m);
+void	unset_last_ex(t_cmd **data, t_env **env);
 //=============================================>>>>>>>>>>>>>>>>>>>>
 t_env   *duplicate_env(void);
 char	**env_to_char(void);

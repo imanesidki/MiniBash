@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 03:46:38 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/19 05:24:04 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/20 00:56:14 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,7 @@ void	echo_cmd(t_cmd **data)
 			if (*str == '-' && *(str + 1) == 'n' && i == 0)
 				echo_utils(data, &i, &j);
 			else
-			{
-				i = 1;
-				printf("%s",*(*data)->cmd);
-				(*data)->cmd++;
-				if (*(*data)->cmd)
-					printf(" ");
-			}
+				echo_utils_ex(data, &i);
 		}
 		if (j != 10)
 			printf("\n");
@@ -74,7 +68,7 @@ void	env_cmd(void)
 
 	head = g_glb.env;
 	if (!head || !head->line)
-		return;
+		return ;
 	while (head)
 	{
 		if (head->line && ft_strchr(head->line, '='))
@@ -87,6 +81,7 @@ void	export_cmd(t_cmd *data)
 {
 	char	*key;
 	char	*value;
+	int		len;
 
 	data->cmd++;
 	if (*data->cmd)
@@ -94,100 +89,40 @@ void	export_cmd(t_cmd *data)
 		while (*data->cmd)
 		{
 			value = ft_value(*data->cmd);
-			key = ft_substr(*data->cmd, 0, ft_strlen(*data->cmd) - ft_strlen(value));
+			len = ft_strlen(*data->cmd) - ft_strlen(value);
+			key = ft_substr(*data->cmd, 0, len);
 			keycmp(data, key, value);
 			data->cmd++;
 		}
 	}
 	else
-	{
 		lstcmp();
-	}
 }
 
 void	unset_cmd(t_cmd *data)
 {
-	t_env *env = g_glb.env;
-	t_env *tmp;
-	// int m=0;
+	t_env	*env;
+	int		m;
+
 	data->cmd++;
-	//parsing
 	if (*data->cmd)
 	{
-		// if (unset_parsing(*(*data)->cmd) == 1)
-		// {
-		// 	ft_putstr_fd(2, "ERORR\n");
-		// 	return;
-		// }
-			while (*data->cmd)
-			{
-				// printf("key = |%s|\n",env->key);
-				// printf("%s\t%s\n", *data->cmd, env->key);
-				if ((*data->cmd && env->key) && !ft_strcmp(*data->cmd, env->key))
-				{
-					puts("11111");
-					tmp = env;
-					env = env->next;
-					free(tmp);
-					data->cmd++;
-					g_glb.env = env;
-					// continue;
-				}
-			// 	while (env->next && data->cmd && *data->cmd)
-			// 	{
-			// 		if (*data->cmd && tmp_env->key && !ft_strcmp(*data->cmd, tmp_env->key))
-			// 		{
-			// 			puts("22222");
-			// 			tmp = tmp_env;
-			// 			tmp_env = tmp_env->next;
-			// 			free(tmp);
-			// 			data->cmd++;
-			// 			m=1;
-			// 			break;
-			// 		}
-			// 		tmp_env = tmp_env->next;
-			// 	}
-			// 	if (m==0)
-			// 	{
-			// 		if (*data->cmd && tmp_env->next->key && !ft_strcmp(*data->cmd, tmp_env->next->key))
-			// 		{
-			// 			puts("333333");
-			// 			tmp = tmp_env->next;
-			// 			tmp_env->next = NULL;
-			// 			free(tmp);
-			// 			data->cmd++;
-			// 			continue;
-			// 		}
-			// 	if (m==0)
-			// 	{
-			// 		puts("444444");
-			// 		data->cmd++;
-			// 	}
-			// }		
-		}
-		//zzzz*env = tmp_env;
-	}
-	else
-		return;
-}
-
-void	pwd_cmd(void)
-{
-	t_env	*head;
-	char	*pwd;
-
-	head = g_glb.env;
-	pwd = getcwd(NULL, 0);
-	if (pwd)
-		printf("%s\n", pwd);
-	else
-	{
-		while (head)
+		while (*data->cmd)
 		{
-			if (!ft_strcmp(head->key, "PWD"))
-				break ;
-			head = head->next;
+			env = g_glb.env;
+			m = 0;
+			if (parsing_unset(&data) == -1)
+				continue ;
+			if ((*data->cmd && env->key) && !ft_strcmp(*data->cmd, env->key))
+			{
+				unset_first(&data);
+				continue ;
+			}
+			unset_middle(&data, &env, &m);
+			if (m == 0)
+				unset_last_ex(&data, &env);
 		}
-		printf("%s\n", head->value);
 	}
+	else
+		return ;
 }

@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 20:23:56 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/19 21:02:38 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/20 01:03:53 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ t_env	*variable_environnement(char **envp)
 		key = ft_substr(envp[i], 0, ft_strlen(envp[i]) - ft_strlen(value) - 1);
 		tab = ft_lstnew_2(envp[i], key, value);
 		ft_lstadd_back_2(&g_glb.env, tab);
-		// free(tab);
 		i++;
 	}
 	return (tab);
@@ -94,7 +93,6 @@ t_env	*duplicate_env(void)
 	{
 		tab = ft_lstnew_2(head->line, head->key, head->value);
 		ft_lstadd_back_2(&str, tab);
-		// free(tab);
 		head = head->next;
 	}
 	return (str);

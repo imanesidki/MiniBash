@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 20:10:53 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/19 20:30:32 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/20 00:59:30 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,14 @@ int	keycmp_continue(t_cmd *head, char *key, char *value, int i)
 	path = key;
 	if (!ft_strcmp(key, ""))
 	{
-		printf("minishell: export: `%s': not a valid identifier\n", *head->cmd);
+		ft_put_str_error(*head->cmd);
 		return (-1);
 	}
 	while (*path)
 	{
 		if (!ft_isalpha(*path))
 		{
-			printf("minishell: export: `%s': not a valid identifier\n", *head->cmd);
+			ft_put_str_error(*head->cmd);
 			return (-1);
 		}
 		path++;
@@ -78,7 +78,7 @@ int	keycmp(t_cmd *head, char *key, char *value)
 	len = ft_strlen(*head->cmd) - ft_strlen(value);
 	if (check_key(key) == -1)
 	{
-		printf("minishell: export: `%s': not a valid identifier\n", *head->cmd);
+		ft_put_str_error(*head->cmd);
 		return (-1);
 	}
 	else if (check_key(key) == 1)

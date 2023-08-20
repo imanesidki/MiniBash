@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:11:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/19 20:11:16 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/20 01:06:16 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,12 +163,12 @@ int	check_error(char *key, t_cmd *head)
 {
 	if (!key)
 	{
-		printf("minishell: export: `%s': not a valid identifier\n", *head->cmd);
+		ft_put_str_error(*head->cmd);
 		return(-1);
 	}
 	if (check_key(key) == -1)
 	{
-		printf("minishell: export: `%s': not a valid identifier\n", *head->cmd);
+		ft_put_str_error(*head->cmd);
 		return(-1);
 	}
 	return (0);
@@ -185,56 +185,3 @@ int is_builting(t_cmd *data)
 		return (0);
 	return (1);
 }
-
-
-// int	main(int ac, char **av, char **envp)
-// {
-// 	(void)ac;
-// 	(void)av;
-// 	t_cmd*data;
-// 	t_cmd *head;
-// 	t_env	*env;
-// 	t_env	*export;
-// 	int		in;
-// 	int		out;
-
-// 	data = malloc(sizeof(t_cmd)); //ft_calloc
-// 	data->env = envp;
-// 	env = variable_environnement(data);
-// 	export = variable_environnement(data);
-// 	while (1)
-// 	{
-// 		// in = dup(0);
-// 		// out = dup(1);
-// 		data->input = readline("minishell $ ");
-// 		if(!data->input)
-// 			exit(0);
-// 		if (ft_strcmp(data->input, ""))
-// 		{
-// 			add_history(data->input);
-// 			take_cmd(&data);
-// 			ft_type(&data);
-// 			//redirection(&data);
-// 			execution(data, env, export);
-// 			// dup2(in, 0);
-// 			// dup2(out, 1);
-// 		}
-// 	}
-// }
-
-// int 	len(t_cmd **head)
-// {
-// 	int		i;
-// 	char	*str;
-
-// 	i = 0;
-// 	str = (*head)->cmd;
-// 	while (str)
-// 	{
-// 		if (*str == '=')
-// 			break;
-// 		i++;
-// 		str++;
-// 	}
-// 	return(i);
-// }
