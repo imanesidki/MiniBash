@@ -3,20 +3,12 @@
 minishell: syntax error near unclosed quotes
 the delimiter should be "ls and it should work
 
-< in cat | cat | cat | cat |ls
-
-env imane or osarsar
-
 HEREDOC
-
-unset
 
 NULL
 
 $$$
 
-commande not found
-line head->line
 putstr
 
 exit

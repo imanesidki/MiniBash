@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 18:26:24 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/20 07:00:39 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/20 20:22:43 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -979,7 +979,7 @@ void	ft_free(void *ptr)
 		{
 			if (grb->is_freed == 0)
 			{
-				free(ptr);
+				//free(ptr);
 				grb->is_freed = 1;
 			}
 		}

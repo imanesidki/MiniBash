@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/20 06:53:46 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/20 23:21:07 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int	main(int ac, char **av, char **env)
 			ft_lstclear_cmd(&cmd);
 			continue;
 		}
-		redirection(cmd);
+		execution_and_redirection(cmd);
 		// if (!cmd) 
-		// print_cmd_linked_list(&cmd);
+		//print_cmd_linked_list(&cmd);
 		// 	break ;
 		if (!g_glb.opn_fls)
 			g_glb.exit_status = 0; // should rather be done at (exit and echo) in execution

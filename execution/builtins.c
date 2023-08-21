@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 03:46:38 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/20 00:56:14 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/21 00:50:36 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	export_cmd(t_cmd *data)
 			data->cmd++;
 		}
 	}
-	else
+	else if (g_glb.env)
 		lstcmp();
 }
 

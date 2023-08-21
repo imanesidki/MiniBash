@@ -97,7 +97,6 @@ struct s_garbage
 
 t_glb g_glb;
 //=========================================================//
-// int		ft_atoi(char *str);
 t_cmd	*ft_lstnew_1(void *content, t_cmd *data);
 int		ft_isspace(char *input);
 void	ft_lstadd_back_1(t_cmd **lst, t_cmd *new);
@@ -141,9 +140,11 @@ int		keycmp(t_cmd *head, char *key, char *value);
 int		add_key(t_cmd *data, char *key, char *value, int i);
 int		keycmp_continue(t_cmd *head, char *key, char *value, int i);
 t_env	*lstcmp(void);
+void	tri_lst(t_env *head);
+void	handle(int sig);
 void	exec_cmd(t_cmd *data);
 void	execution(t_cmd **cmd);
-int		redirection(t_cmd *data);
+int		execution_and_redirection(t_cmd *data);
 void	ft_process(t_cmd *data, int fd[2]);
 /*************************************************/
 t_token	which_token(char c1, char c2);

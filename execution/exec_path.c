@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:26:51 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/20 01:03:08 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/20 22:16:48 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	ft_execve_valid_path(t_cmd *data)
 		ft_execve(data);
 		i++;
 	}
-	perror("minishell ");
+	ft_putstr_fd(2, "minishell : command not found\n");
 	exit(127);
 	return (0);
 }
