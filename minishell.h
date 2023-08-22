@@ -125,6 +125,10 @@ int		parsing_unset(t_cmd **data);
 void	ft_put_str_error(char *arg);
 void	unset_middle(t_cmd **data, t_env **env, int *m);
 void	unset_last_ex(t_cmd **data, t_env **env);
+void	exex_with_pipe_middle_utils(t_cmd **data, int pid, int *fd);
+void	exec_with_pipe_middle(t_cmd **data);
+int		exec_with_pipe_last(t_cmd *data);
+int		exec_with_no_pipe(t_cmd *data);
 //=============================================>>>>>>>>>>>>>>>>>>>>
 t_env   *duplicate_env(void);
 char	**env_to_char(void);
