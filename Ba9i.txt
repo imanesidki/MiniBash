@@ -12,3 +12,5 @@ $$$
 putstr
 
 exit
+
+fork multiple ./minishell
