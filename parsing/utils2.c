@@ -472,8 +472,11 @@ void	look_for_dlr(t_lexer *tmp)
 	}
 }
 
-void	ft_ambigs_redirect(t_lexer *dlr, t_lexer *word)
+void	ft_ambigs_redirect(t_lexer **head, t_lexer *dlr, t_lexer *word)
 {
+	t_lexer	*tmp;
+
+	tmp = dlr;
 	ft_check_env(word);
 	if (!*word->cmd)
 	{
@@ -485,6 +488,7 @@ void	ft_ambigs_redirect(t_lexer *dlr, t_lexer *word)
 			|| dlr->token == APPEND))
 			dlr->fd = -3;
 	}
+	ft_delete_node(head, tmp);
 }
 
 void	empty_two_nodes(t_lexer **tmp)
@@ -523,8 +527,7 @@ void	ft_expand(t_lexer **head)
 			if (tmp->next->token == WORD)
 			{
 				current = tmp->next;
-				ft_ambigs_redirect(tmp, tmp->next);
-				ft_delete_node(head, tmp);
+				ft_ambigs_redirect(head, tmp, tmp->next);
 				tmp = current;
 			}
 		}
@@ -1153,6 +1156,7 @@ t_cmd	*parsing(char *input)
 	ft_expand(&l);
 	ft_split_pipe(&l, &cmd);
 	redirections(&l, &cmd, fd_in_herdoc);
+	// print_linked_list(&l);
 	ft_lstclear_lex(&l);
 	return (cmd);
 }

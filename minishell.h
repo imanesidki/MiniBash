@@ -194,7 +194,7 @@ void	ft_lexer(char *input, t_lexer **head);
 int 	ft_strlen(char *str);
 void	empty_two_nodes(t_lexer **node);
 int		no_expand_in_herdc_delim(t_lexer **node);
-void	ft_ambigs_redirect(t_lexer *dlr, t_lexer *word);
+void	ft_ambigs_redirect(t_lexer **head, t_lexer *dlr, t_lexer *word);
 void 	concat_words(t_lexer *tmp, t_lexer *current);
 char	*ft_strtrim(char *s1, char *set);
 char	*concat_var(char *wrd_expd, int i, int j, char *var);
