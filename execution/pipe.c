@@ -41,10 +41,8 @@ void	exec_with_pipe_middle(t_cmd **data)
 {
 	int	fd[2];
 	int	pid;
-	int	i;
 
 	pid = -1;
-	i = 0;
 	while ((*data)->next)
 	{
 		pipe(fd);
@@ -52,7 +50,6 @@ void	exec_with_pipe_middle(t_cmd **data)
 		close(fd[1]);
 		dup2(fd[0], 0);
 		close(fd[0]);
-		i = 0; 
 		*data = (*data)->next;
 	}
 }

@@ -61,7 +61,7 @@ void	ft_lstclear_lex(t_lexer **lst)
 		l = parcour;
 		parcour = parcour->next;
 		ft_free(l->cmd);
-		free (l);
+		ft_free (l);
 	}
 	*lst = NULL;
 }

@@ -45,25 +45,25 @@ t_garbage	*ft_lstnew_garbage(void *ptr)
 	return (node);
 }
 
-void	ft_lstclear_garbage(t_garbage **lst)
-{
-	t_garbage	*parcour;
-	t_garbage	*l;
+// void	ft_lstclear_garbage(t_garbage **lst)
+// {
+// 	t_garbage	*parcour;
+// 	t_garbage	*l;
 
-	if (!lst)
-		return ;
-	parcour = *lst;
-	while (parcour)
-	{
-		l = parcour;
-		parcour = parcour->next;
-		// if (l->garbage && *l->garbage)
-		// {
-		// 	while (*l->garbage)
-		// 		ft_free(*l->garbage++);
-		// 	ft_free(l->garbage);
-		// }
-		//free (l);
-	}
-	*lst = NULL;
-}
+// 	if (!lst)
+// 		return ;
+// 	parcour = *lst;
+// 	while (parcour)
+// 	{
+// 		l = parcour;
+// 		parcour = parcour->next;
+// 		if (l->garbage && *l->garbage)
+// 		{
+// 			while (*l->garbage)
+// 				free(*l->garbage++);
+// 			free(l->garbage);
+// 		}
+// 		free (l);
+// 	}
+// 	*lst = NULL;
+// }

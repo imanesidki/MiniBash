@@ -66,7 +66,7 @@ void	ft_lstclear_cmd(t_cmd **lst)
 				ft_free(*l->cmd++);
 			ft_free(l->cmd);
 		}
-		free (l);
+		ft_free (l);
 	}
 	*lst = NULL;
 }

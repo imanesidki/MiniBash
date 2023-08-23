@@ -59,7 +59,7 @@ void	ft_lstclear_env(t_env **lst)
 		parcour = parcour->next;
 		ft_free(l->key);
 		ft_free(l->value);
-		free (l);
+		ft_free (l);
 	}
 	*lst = NULL;
 }

@@ -14,10 +14,8 @@
 
 char	*find_path(void)
 {
-	int		i;
 	t_env	*env;
 
-	i = 0;
 	env = g_glb.env;
 	while (env)
 	{

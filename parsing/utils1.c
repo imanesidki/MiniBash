@@ -108,7 +108,7 @@ char	*ft_strdup(char *source)
 	int		i;
 
 	i = ft_strlen(source);
-	dst = (char *) ft_malloc(i + 1);
+	dst = (char *)ft_malloc(i + 1);
 	if (!dst)
 		return (NULL);
 	ft_memcpy((void *)dst, (void *)source, i);
@@ -136,7 +136,7 @@ void	ft_putstr_fd(int fd, char *s)
 	write (fd, s, len);
 }
 
-void	ft_putstring_fd(int fd, char *s1, char *s2)
+void	ft_putstring_fd(int fd, char *s1, char *s2, int i)
 {
 	int len1;
 	int len2;
@@ -150,4 +150,5 @@ void	ft_putstring_fd(int fd, char *s1, char *s2)
 	write(fd, ": ", 1);
 	write(fd, s2, len2);
 	write(fd, "\n", 1);
+	g_glb.exit_status = i;
 }

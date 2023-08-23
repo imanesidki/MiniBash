@@ -12,12 +12,12 @@
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-#include <stdio.h>
-#include <unistd.h>
+# include <stdio.h>
+# include <unistd.h>
 # include <string.h>
-#include <fcntl.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <fcntl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <stdbool.h>
 # include <stdlib.h>
 # include <limits.h>
@@ -25,8 +25,8 @@
 # include <dirent.h>
 # include <signal.h>
 # include <sys/ioctl.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
 
 // #define malloc(sizeof) 0
 
@@ -96,7 +96,8 @@ struct s_garbage
 };
 
 t_glb g_glb;
-//=========================================================//
+
+/*************************************************/
 t_cmd	*ft_lstnew_1(void *content, t_cmd *data);
 int		ft_isspace(char *input);
 void	ft_lstadd_back_1(t_cmd **lst, t_cmd *new);
@@ -151,7 +152,10 @@ void	execution(t_cmd **cmd);
 int		execution_and_redirection(t_cmd *data);
 void	ft_process(t_cmd *data, int fd[2]);
 /*************************************************/
+void	main_init(char **env);
+int		protection_input(char *input);
 t_token	which_token(char c1, char c2);
+void	assign_tok(t_lexer *tmp, t_token *tok);
 void	ft_lstclear_garbage(t_garbage **lst);
 void	ft_lstadd_back_garbage(t_garbage **lst, t_garbage *new);
 void	ft_change_dlr_word(t_lexer **head);
@@ -183,19 +187,21 @@ int		lstsize();
 char	**ft_split(char const *s, char c);
 void	empty_string(t_lexer **l, t_lexer *hold, t_token tok);
 void	ft_lstadd_back_lex(t_lexer **lst, t_lexer *new);
-int	 ft_check_quotes(t_lexer **l, t_token tok);
+int	 	ft_check_quotes(t_lexer **l);
 int 	char_in_set(char *set, char c);
 t_cmd	*parsing(char *input);
 void	ft_lexer(char *input, t_lexer **head);
 int 	ft_strlen(char *str);
-void	env_to_map(char **env);
+void	empty_two_nodes(t_lexer **node);
+int		no_expand_in_herdc_delim(t_lexer **node);
+void	ft_ambigs_redirect(t_lexer *dlr, t_lexer *word);
 void 	concat_words(t_lexer *tmp, t_lexer *current);
 char	*ft_strtrim(char *s1, char *set);
 char	*concat_var(char *wrd_expd, int i, int j, char *var);
 char	*ft_substr(char *s, int start, int len);
 void	ft_open_files(t_lexer **temp);
 char	*ft_strjoin(char *s1, char *s2);
-int	 ft_strcmp(const char *s1, const char *s2);
+int	 	ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(char *source);
 t_garbage	*get_garbage_collector(void);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
@@ -204,7 +210,7 @@ void	concat_word_lexer(t_lexer **l);
 void	check_redirect_open(t_lexer **tmp, t_lexer *hold, int *fd);
 void	look_for_dlr(t_lexer *tmp);
 void	delete_spc(t_lexer **head, t_lexer *temp);
-void	ft_check_env(t_lexer **head, t_lexer *dlr_ptr);
+void	ft_check_env(t_lexer *dlr_ptr);
 int		ft_syntax_error(t_lexer *tmp);
 void	delete_quotes(t_lexer **head);
 t_lexer	*find_matching_quote(t_lexer *start, t_token tok);
@@ -213,12 +219,13 @@ void	ft_expand(t_lexer **head);
 char	*ft_env_var(char *var);
 void	tokenize_redirections(t_lexer **head);
 int		is_identifier(char c);
-void	ft_putstring_fd(int fd, char *s1, char *s2);
+void	ft_putstring_fd(int fd, char *s1, char *s2, int i);
 int		ft_isalnum(char c);
+void	fd_cmd(t_lexer **head, t_cmd **cmd, int fd_herdc);
+int		unexpected_tok(t_lexer *tmp);
 int		handle_dqu(t_lexer *temp, t_lexer *hold, t_token tok);
 t_lexer	*ft_heredoc_delimiter(t_lexer **head);
 t_lexer	*find_delimiter(t_lexer **head);
-void	free_memo(t_lexer **l, t_env **list_env);
 void	*ft_malloc(size_t size);
 int 	ft_heredoc(t_lexer **head);
 void	concat_between_qu(t_lexer *start, t_lexer *end, t_token tok);

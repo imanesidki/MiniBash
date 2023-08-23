@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 18:26:24 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/20 20:22:43 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/20 07:00:39 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int	ft_strlen(char *str)
 	int	i;
 
 	i = 0;
+	if (!str)
+		return (0);
 	while (str[i])
 		i++;
 	return (i);
@@ -99,7 +101,7 @@ void	concat_between_qu(t_lexer *start, t_lexer *end, t_token tok)
 		concatenated = ft_strjoin(current->cmd, tmp->cmd);
 		if (!concatenated)
 			break ;
-		free (current->cmd);
+		ft_free (current->cmd);
 		current->cmd = concatenated;
 		current->token = tok;
 		current->next = tmp->next;
@@ -174,15 +176,26 @@ void	empty_string(t_lexer **l, t_lexer *hold, t_token tok)
 	ft_delete_node(l, hold->prev);
 }
 
-int	ft_check_quotes(t_lexer **l, t_token tok)
+void	assign_tok(t_lexer *tmp, t_token *tok)
 {
-	t_lexer*	temp;
-	t_lexer*	hold;
+	if (tmp->token == DQU)
+		*tok = DQU;
+	else if (tmp->token == SQU)
+		*tok = SQU;
+}
+
+int	ft_check_quotes(t_lexer **l)
+{
+	t_lexer	*temp;
+	t_lexer	*hold;
+	t_token	tok;
 
 	temp = *l;
 	while (temp)
 	{
-		if (temp->token == tok)
+		tok = temp->token;
+		assign_tok(temp, &tok);
+		if (tok == SQU || tok == DQU)
 		{
 			hold = temp->next;
 			temp = find_matching_quote(temp, tok);
@@ -254,7 +267,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	l = 0;
 	str = (char *)ft_malloc(i + j + 1);
 	if (!str)
-		return (NULL);//exit if ft_malloc fails and free 
+		return (NULL);//exit if ft_malloc fails
 	while (*s1)
 		str[l++] = *s1++;
 	while (*s2)
@@ -281,7 +294,7 @@ char	*ft_strtrim(char *s1, char *set)
 	return (ft_substr(s1, i, (len - i + 1)));
 }
 
-void	print_cmd_linked_list(t_cmd** head)
+void	print_cmd_linked_list(t_cmd** head) //delete
 {
 	t_cmd*	temp;
 
@@ -291,7 +304,7 @@ void	print_cmd_linked_list(t_cmd** head)
 	{
 		printf("-----------\n");
 		int ii = 0;
-		while (temp->cmd[ii])
+		while (temp->cmd && temp->cmd[ii])
 			printf("|%s|\n",temp->cmd[ii++]);
 		printf("cmd->fd[0]= %d\n", temp->fd[0]);
 		printf("cmd->fd[1]= %d\n", temp->fd[1]);
@@ -301,7 +314,7 @@ void	print_cmd_linked_list(t_cmd** head)
 	printf("END\n");
 }
 
-void	print_linked_list(t_lexer** head)
+void	print_linked_list(t_lexer** head) //delete
 {
 	t_lexer*	temp;
 
@@ -314,18 +327,17 @@ void	print_linked_list(t_lexer** head)
 	printf("END\n");
 }
 
-void	printLinkedListReverse(t_lexer** head)
+void	printLinkedListReverse(t_lexer** head) //delete
 {
 	t_lexer* temp = *head;
 
-	while (temp && temp->next) {
+	while (temp && temp->next)
 		temp = temp->next;
-	}
-	while (temp) {
+	while (temp)
+	{
 		printf("(%s, %d) -> ", temp->cmd, (int)temp->token);
 		temp = temp->prev;
 	}
-
 	printf("start\n");
 }
 
@@ -350,7 +362,7 @@ void	delete_quotes(t_lexer** head)
 	delete_consctv_spaces(head);
 }
 
-void	ft_check_env(t_lexer **head, t_lexer *dlr_ptr)
+void	ft_check_env(t_lexer *dlr_ptr)
 {
 	char	*value;
 
@@ -360,8 +372,6 @@ void	ft_check_env(t_lexer **head, t_lexer *dlr_ptr)
 		ft_free(dlr_ptr->cmd);
 		dlr_ptr->cmd = value;
 	}
-	else
-		ft_delete_node(head, dlr_ptr);
 }
 
 char	*ft_env_var(char *var)
@@ -462,41 +472,64 @@ void	look_for_dlr(t_lexer *tmp)
 	}
 }
 
+void	ft_ambigs_redirect(t_lexer *dlr, t_lexer *word)
+{
+	ft_check_env(word);
+	if (!*word->cmd)
+	{
+		if (dlr->prev && dlr->prev->token == SPC && dlr->prev->prev)
+			dlr = dlr->prev->prev;
+		else if (dlr->prev)
+			dlr = dlr->prev;
+		if (dlr && (dlr->token == IN || dlr->token == OUT
+			|| dlr->token == APPEND))
+			dlr->fd = -3;
+	}
+}
+
+void	empty_two_nodes(t_lexer **tmp)
+{
+	ft_free((*tmp)->cmd);
+	(*tmp)->cmd = ft_strdup("");
+	ft_free((*tmp)->next->cmd);
+	(*tmp)->next->cmd = ft_strdup("");		
+	(*tmp) = (*tmp)->next;
+}
+
+int	no_expand_in_herdc_delim(t_lexer **tmp)
+{
+	if ((*tmp)->prev && ((*tmp)->prev->token == HEREDOC
+		|| ((*tmp)->prev->token == SPC && (*tmp)->prev->prev
+			&& (*tmp)->prev->prev->token == HEREDOC)))
+	{
+		(*tmp) = (*tmp)->next;
+		return (1);
+	}
+	return (0);
+}
+
 void	ft_expand(t_lexer **head)
 {
-	t_lexer	*tmp;
 	t_lexer	*current;
+	t_lexer	*tmp;
 
 	tmp = *head;
-	// env_to_map(env, env_list);
 	while (tmp)
 	{
-		current = tmp->next;
-		if (tmp->prev && (tmp->prev->token == HEREDOC
-				|| (tmp->prev->token == SPC && tmp->prev->prev
-					&& tmp->prev->prev->token == HEREDOC)))
-		{
-			tmp = current;
+		if (no_expand_in_herdc_delim(&tmp))
 			continue ;
-		}
 		if (tmp->token == DLR && tmp->next)
 		{
-			if (current->token == WORD)
+			if (tmp->next->token == WORD)
 			{
+				current = tmp->next;
+				ft_ambigs_redirect(tmp, tmp->next);
 				ft_delete_node(head, tmp);
-				ft_check_env(head, current);
+				tmp = current;
 			}
 		}
 		if (tmp->token == DLR && tmp->next && tmp->next->token == DLR)
-		{
-			free(tmp->cmd);
-			tmp->cmd = NULL;
-			tmp->cmd = ft_strdup("");
-			free(tmp->next->cmd);
-			tmp->next->cmd = NULL;
-			tmp->next->cmd = ft_strdup("");		
-			tmp = tmp->next;
-		}
+			empty_two_nodes(&tmp);
 		else if (tmp->token == DLR && !tmp->next)
 			tmp->token = WORD;
 		else if (tmp->token == DQU)
@@ -550,6 +583,7 @@ t_lexer	*ft_heredoc_delimiter(t_lexer **head)
 
 	tmp = *head;
 	hold = NULL;
+	g_glb.sg = 0;
 	while (tmp)
 	{
 		check_heredoc_delimiter(tmp, hold);
@@ -578,7 +612,7 @@ void	handle_delete_node(t_lexer **head, t_lexer *node)
 	if (!node->next && !node->prev) 
 		*head = NULL;
 	ft_free(node->cmd);
-	// ft_free(node);
+	ft_free(node);
 }
 
 void	ft_delete_node(t_lexer **head, t_lexer *node)
@@ -611,7 +645,7 @@ void	ft_check_expand_in_line(char **line)
 		if (lin[i] == '$' && lin[i + 1] != '$')
 		{
 			concat = ft_split_concat_dqu_dlr(i, lin);
-			ft_free(lin);
+			free(lin);
 			lin = concat;
 			i = -1;
 		}
@@ -631,64 +665,78 @@ void	ft_sig_handler(int sig)
 	}
 }
 
+int	ft_readline_herdc(int *tt, t_lexer **loop, t_lexer *tmp, int *fd_return)
+{
+	int		fds[2];
+	char	*line;
+
+	if (pipe(fds) == -1)
+		return (g_glb.exit_status = 1, -1);
+	line = readline("> ");
+	if (!line)
+	{
+		(*loop) = (*loop)->next;
+		*tt = 1;
+	}
+	while (line && ft_strcmp(line, tmp->cmd) && !*tt)
+	{
+		if (!g_glb.dqu)
+			ft_check_expand_in_line(&line);
+		write(fds[1], line, ft_strlen(line));
+		write(fds[1], "\n", 1);
+		free(line);
+		line = readline("> ");
+	}
+	free(line);
+	if (g_glb.sg == 1)
+		return (-1);
+	return (g_glb.dqu = 0, close(fds[1]), *fd_return = fds[0], 0);
+}
+
 int	ft_heredoc(t_lexer **head)
 {
-	char	*line;
-	int		fds[2];
 	t_lexer	*tmp;
 	t_lexer	*loop;
+	int		tt;
 	int		fd_return;
-
 
 	loop = *head;
 	tmp = NULL;
 	while (loop)
 	{
-		int tt = 0;
-		g_glb.sg = 0;
+		tt = 0;
 		tmp = ft_heredoc_delimiter(&loop);
 		signal(SIGINT, ft_sig_handler);
 		if (tmp)
 		{
-			if (pipe(fds) == -1)
-			{
-				g_glb.exit_status = 1;
-				return (1);
-			}
-			// env_to_map(env, env_list);
-			line = readline("> ");
-			if (!line)
-			{
-				// ft_free(line);
-				loop = loop->next;
-				tt = 1;
-			}
-			while (line && ft_strcmp(line, tmp->cmd) && !tt)
-			{
-				if (!g_glb.dqu)
-					ft_check_expand_in_line(&line);
-				write(fds[1], line, ft_strlen(line));
-				write(fds[1], "\n", 1);
-				ft_free(line);
-				line = readline("> ");
-			}
-			ft_free (line);
-			if (g_glb.sg == 1)
-				return(-1);
-			// ft_lstclear_env(env_list);
-			g_glb.dqu = 0;
-			close(fds[1]);
-			fd_return = fds[0];
+			if (ft_readline_herdc(&tt, &loop, tmp, &fd_return) == -1)
+				return (-1);
 			if (tmp->next)
 				loop = tmp->next;
 			else
 				break;
 		}
 		else if (loop)
-			loop = loop->next;
-		
+			loop = loop->next;		
 	}
 	return (fd_return);
+}
+
+int	unexpected_tok(t_lexer *tmp)
+{
+	if ((tmp->token == IN || tmp->token == OUT
+			|| tmp->token == APPEND || tmp->token == HEREDOC)
+		&& tmp->next && ((tmp->next->token != WORD
+		&& tmp->next->token != DQU && tmp->next->token != SQU
+		&& tmp->next->token != DLR && tmp->next->token != SPC)
+		|| (tmp->next->token == SPC && tmp->next->next
+		&& tmp->next->next->token != WORD && tmp->next->next->token != DQU
+		&& tmp->next->next->token != SQU && tmp->next->next->token != DLR)))
+	{
+		ft_putstr_fd(2, "minishell: syntax error near unexpected token\n");
+		return (1);
+	}
+	return (0);
 }
 
 int	ft_syntax_error(t_lexer *tmp)
@@ -700,16 +748,8 @@ int	ft_syntax_error(t_lexer *tmp)
 		ft_putstr_fd(2, "minishell: syntax error near unexpected token `newline'\n");
 		return (1);
 	}
-	if ((tmp->token == IN || tmp->token == OUT
-			|| tmp->token == APPEND || tmp->token == HEREDOC)
-		&& tmp->next && ((tmp->next->token != WORD && tmp->next->token != DQU
-		&& tmp->next->token != SQU && tmp->next->token != DLR && tmp->next->token != SPC)
-		|| (tmp->next->token == SPC && tmp->next->next && tmp->next->next->token != WORD
-		&& tmp->next->next->token != DQU && tmp->next->next->token != SQU && tmp->next->next->token != DLR)))
-	{
-		ft_putstr_fd(2, "minishell: syntax error near unexpected token\n");
+	if (unexpected_tok(tmp))
 		return (1);
-	}
 	if (tmp->token == PIPE && tmp->next && (tmp->next->token == PIPE
 			|| (tmp->next->token == SPC && tmp->next->next
 				&& tmp->next->next->token == PIPE)))
@@ -778,9 +818,14 @@ void	assign_fd(t_lexer **tmp, int *fd_in, int *fd_out, int fd_herdc)
 
 void	check_redirect_open(t_lexer **tmp, t_lexer *hold, int *fd)
 {
-
 	if ((*tmp)->token == SPC)
 		(*tmp) = (*tmp)->prev;
+	if (((*tmp)->token == IN || (*tmp)->token == OUT
+		|| (*tmp)->token == APPEND) && (*tmp)->fd == -3)
+	{
+		*fd = -3;
+		return ; 
+	}
 	if ((*tmp)->token == IN)
 		*fd = open(hold->cmd, O_RDONLY);
 	else if ((*tmp)->token == OUT)
@@ -804,43 +849,30 @@ void	ft_open_files(t_lexer **temp)
 			check_redirect_open(&tmp, hold, &fd);
 			if (fd == -1)
 			{
-				ft_putstring_fd(2, hold->cmd, strerror(errno));
-				g_glb.exit_status = 1;
+				ft_putstring_fd(2, hold->cmd, strerror(errno), 1);
 				return ;
 			}
-			else
+			if (fd == -3)
+			{
+				ft_putstring_fd(2, "", " ambiguous redirect", 1);
+				return ;
+			}
 			tmp->fd = fd;
 		}
 		tmp = hold;
 	}
 }
-void	redirections(t_lexer **head, t_cmd **cmd, int fd_herdc)
+
+void	fd_cmd(t_lexer **head, t_cmd **cmd, int fd_herdc)
 {
-	t_lexer	*tmp;
-	t_lexer	*hold;
-	t_cmd	*cmnd;
 	int		fd_in;
 	int		fd_out;
-	
-	tmp = *head;
+	t_lexer	*tmp;
+	t_cmd	*cmnd;
+
 	cmnd = *cmd;
-	while (tmp->next)
-		tmp = tmp->next;
-	while (tmp)
-	{
-		while (tmp->prev && tmp->prev->token != PIPE)
-		{		
-			tmp = tmp->prev;
-		}
-		hold = tmp;
-		ft_open_files(&tmp);
-		tmp = hold;
-		tmp = tmp->prev;
-		if (tmp && tmp->token == PIPE)
-			tmp = tmp->prev;
-	}
 	tmp = *head;
-	while (tmp) 
+	while (tmp)
 	{
 		fd_in = -2;
 		fd_out = -2;
@@ -855,6 +887,28 @@ void	redirections(t_lexer **head, t_cmd **cmd, int fd_herdc)
 		if (tmp && tmp->token == PIPE)
 			tmp = tmp->next;
 	}
+}
+
+void	redirections(t_lexer **head, t_cmd **cmd, int fd_herdc)
+{
+	t_lexer	*tmp;
+	t_lexer	*hold;
+	
+	tmp = *head;
+	while (tmp->next)
+		tmp = tmp->next;
+	while (tmp)
+	{
+		while (tmp->prev && tmp->prev->token != PIPE)
+			tmp = tmp->prev;
+		hold = tmp;
+		ft_open_files(&tmp);
+		tmp = hold;
+		tmp = tmp->prev;
+		if (tmp && tmp->token == PIPE)
+			tmp = tmp->prev;
+	}
+	fd_cmd(head, cmd, fd_herdc);
 }
 
 int	ft_nbr_cmd(t_lexer *tmp)
@@ -877,7 +931,7 @@ void	split_cmd(t_lexer **tmp, int i, t_lexer *hold, char ***cmnd)
 	int	j;
 
 	j = 0;
-	*cmnd = (char **)ft_malloc((sizeof(char *) * (i + 1))+1);//ATTENTION ZDNA 1
+	*cmnd = (char **)ft_malloc((sizeof(char *) * (i + 1)));
 	if (!(*cmnd))
 		return ; //exit
 	(*tmp) = hold;
@@ -979,7 +1033,7 @@ void	ft_free(void *ptr)
 		{
 			if (grb->is_freed == 0)
 			{
-				//free(ptr);
+				free(ptr);
 				grb->is_freed = 1;
 			}
 		}
@@ -1065,7 +1119,7 @@ void	ft_file_redirect(t_lexer **head)
 
 void	ft_signal(void)
 {
-	// rl_catch_signals = 0;
+	rl_catch_signals = 0;
 	if (signal(SIGINT, sig_handl) == SIG_ERR
 		|| signal(SIGQUIT, SIG_IGN) == SIG_ERR
 		|| signal(SIGTSTP, SIG_IGN) == SIG_ERR)
@@ -1075,7 +1129,7 @@ void	ft_signal(void)
 	}
 }
 
-t_cmd	*parsing(char *input)   //delete check after ft_malloc to exit
+t_cmd	*parsing(char *input)
 {
 	char	*s;
 	t_lexer	*l;
@@ -1088,34 +1142,17 @@ t_cmd	*parsing(char *input)   //delete check after ft_malloc to exit
 	ft_free(input);
 	ft_lexer(s, &l);
 	ft_free(s);
-	if (ft_check_quotes(&l, DQU) || ft_check_quotes(&l, SQU))
-	{
-		ft_lstclear_lex(&l);
-		return (NULL);
-	}
+	if (ft_check_quotes(&l))
+		return (ft_lstclear_lex(&l), NULL);
 	delete_quotes(&l);
 	fd_in_herdoc = ft_heredoc(&l);
 	if (fd_in_herdoc == -1)
-	{
-		ft_lstclear_lex(&l);
-		return (NULL);
-	}
+		return (ft_lstclear_lex(&l), NULL);
 	if (ft_parser(&l))
-	{
-		g_glb.exit_status = 258;
-		ft_lstclear_lex(&l);
-		return (NULL);
-	}
-	// print_linked_list(&l);
+		return (g_glb.exit_status = 258, ft_lstclear_lex(&l), NULL);
 	ft_expand(&l);
 	ft_split_pipe(&l, &cmd);
 	redirections(&l, &cmd, fd_in_herdoc);
-	// print_cmd_linked_list(&cmd);
 	ft_lstclear_lex(&l);
 	return (cmd);
 }
-
-//${USER} => expand
-//ambiguous redirect : 
-//bash-3.2$ echo hello > $NONEXISTENT
-//bash: $NONEXISTENT: ambiguous redirect

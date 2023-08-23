@@ -25,42 +25,38 @@ void	main_init(char **env)
 		variable_environnement(env);
 }
 
-void	protection_input(char *input)
+int	protection_input(char *input)
 {
 	if (!input)
 	{
 		printf("exit\n");
 		exit(g_glb.exit_status);
 	}
-	if (input)
+	else if (input)
 		add_history(input);
+	if (ft_isspace(input) || !ft_strcmp(input, ""))
+		return (free(input), 1) ;
+	return (0);
 }
 
-int	main(int ac, char **av, char **env)
+int	main(int ac, char **av, char **env)   //exit after ft_malloc in parsing and execution
 {
-	(void)ac;
-	(void)av;
 	char	*input;
 	t_cmd	*cmd;
 
+	(void) ac;
+	(void) av;
 	main_init(env);
 	while (1)
 	{
 		rl_catch_signals = 0;
 		ft_signal();
 		input = readline("minishell$ ");
-		protection_input(input);
-		if (ft_isspace(input) || !ft_strcmp(input, ""))
-		{
-			free(input);
+		if (protection_input(input))
 			continue ;
-		}
 		cmd = parsing(input);
 		if (cmd == NULL)
-		{
-			ft_lstclear_cmd(&cmd);
 			continue;
-		}
 		execution_and_redirection(cmd);
 		if (!g_glb.opn_fls)
 			g_glb.exit_status = 0; // should rather be done at (exit and echo) in execution
