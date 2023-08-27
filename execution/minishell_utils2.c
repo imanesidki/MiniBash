@@ -27,14 +27,10 @@ int	ft_strlen_2(char **str)
 char	*ft_value(char *str)
 {
 	char	*value;
-	int		i;
 
-	i = 0;
 	value = str;
 	while (*value++ != '=' && *value)
-	{
-		i++;
-	}
+		;
 	return (value);
 }
 

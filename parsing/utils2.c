@@ -550,9 +550,10 @@ t_lexer	*find_delimiter(t_lexer **head)
 	{
 		if (tmp->token == HEREDOC && tmp->next)
 		{
-			if (tmp->next->token == SPC && tmp->next->next)
+			if (tmp->next->token == SPC && tmp->next->next
+				&& tmp->next->next->token == WORD)
 				return (tmp->next->next);
-			else
+			else if (tmp->next->token == WORD)
 				return (tmp->next);
 		}
 		tmp = tmp->next;
@@ -1156,7 +1157,6 @@ t_cmd	*parsing(char *input)
 	ft_expand(&l);
 	ft_split_pipe(&l, &cmd);
 	redirections(&l, &cmd, fd_in_herdoc);
-	// print_linked_list(&l);
 	ft_lstclear_lex(&l);
 	return (cmd);
 }
