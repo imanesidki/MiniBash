@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 01:28:10 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/22 01:30:55 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/28 08:51:32 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,18 @@ int	exec_with_no_pipe(t_cmd *data)
 	if (data->fd[0] == -1 || data->fd[1] == -1)
 		return (-1);
 	if (data->fd[1] != -2)
+	{
 		dup2(data->fd[1], 1);
+		close(data->fd[1]);
+	}
 	if (data->fd[0] != -2)
+	{
 		dup2(data->fd[0], 0);
+		close(data->fd[0]);
+	}
 	if (!is_builting(data))
 		execution(&data);
-	else
+	else if (data->cmd)
 	{
 		pid = fork();
 		if (pid == 0)

@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 18:26:24 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/20 07:00:39 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/28 08:53:23 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -674,6 +674,8 @@ int	ft_readline_herdc(int *tt, t_lexer **loop, t_lexer *tmp, int *fd_return)
 	int		fds[2];
 	char	*line;
 
+	if (*fd_return > 0)
+		close(*fd_return);
 	if (pipe(fds) == -1)
 		return (g_glb.exit_status = 1, -1);
 	line = readline("> ");
@@ -813,8 +815,8 @@ void	assign_fd(t_lexer **tmp, int *fd_in, int *fd_out, int fd_herdc)
 	}
 	else if ((*tmp)->token == HEREDOC)
 	{
-		if (fd_in != 0)
-			close(*fd_in);
+		// if (fd_in != 0)
+		// 	close(*fd_in);
 		*fd_in = fd_herdc;
 	}					
 	(*tmp) = (*tmp)->next;
