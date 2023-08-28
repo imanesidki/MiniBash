@@ -11,3 +11,8 @@ putstr
 exit
 
 fork multiple ./minishell
+
+
+
+for test 
+export | tr "=" " "  | awk '{print$3}' | tr "\n" " "

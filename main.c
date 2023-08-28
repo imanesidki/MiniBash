@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/22 01:55:27 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/28 23:09:53 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	main(int ac, char **av, char **env)   //exit after ft_malloc in parsing and 
 		cmd = parsing(input);
 		if (cmd == NULL)
 			continue;
+			// print_cmd_linked_list(&cmd);
 		execution_and_redirection(cmd);
 		if (!g_glb.opn_fls)
 			g_glb.exit_status = 0; // should rather be done at (exit and echo) in execution

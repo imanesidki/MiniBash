@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 00:53:28 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/20 01:02:20 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/28 23:13:15 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,20 @@ void	pwd_cmd(void)
 	head = g_glb.env;
 	pwd = getcwd(NULL, 0);
 	if (pwd)
+	{
 		printf("%s\n", pwd);
+		free(pwd);
+	}
 	else
 	{
 		while (head)
 		{
-			if (!ft_strcmp(head->key, "PWD"))
+			if (head->key && head->value && !ft_strcmp(head->key, "PWD"))
 				break ;
 			head = head->next;
 		}
-		printf("%s\n", head->value);
+		if(head && head->key && head->value)
+			printf("%s\n", head->value);
 	}
 }
 

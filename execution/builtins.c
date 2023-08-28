@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 03:46:38 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/21 00:50:36 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/28 23:07:11 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,17 +110,22 @@ void	unset_cmd(t_cmd *data)
 		while (*data->cmd)
 		{
 			env = g_glb.env;
-			m = 0;
-			if (parsing_unset(&data) == -1)
-				continue ;
-			if ((*data->cmd && env->key) && !ft_strcmp(*data->cmd, env->key))
+			if(env)
 			{
-				unset_first(&data);
-				continue ;
+				m = 0;
+				if (parsing_unset(&data) == -1)
+					continue ;
+				if ((*data->cmd && env->key) && !ft_strcmp(*data->cmd, env->key))
+				{
+					unset_first(&data);
+					continue ;
+				}
+				unset_middle(&data, &env, &m);
+				if (m == 0)
+					unset_last_ex(&data, &env);
 			}
-			unset_middle(&data, &env, &m);
-			if (m == 0)
-				unset_last_ex(&data, &env);
+			else
+				break;
 		}
 	}
 	else

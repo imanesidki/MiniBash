@@ -45,20 +45,21 @@ void	add_pwd(void)
 	head = g_glb.env;
 	while (head)
 	{
-		if (!ft_strcmp(head->key, "OLDPWD"))
+		if (head->key && head->value && !ft_strcmp(head->key, "OLDPWD"))
 			break ;
 		head = head->next;
 	}
 	head_1 = g_glb.env;
 	while (head_1)
 	{
-		if (!ft_strcmp(head_1->key, "PWD"))
+		if (head_1->key && head_1->value && !ft_strcmp(head_1->key, "PWD"))
 			break ;
 		head_1 = head_1->next;
 	}
-	if (head)
+	if (head && head_1 &&  head->key && head_1->value && head->value && head_1->key)
 		head->value = head_1->value;
-	head_1->value = getcwd(NULL, 0);
+	if (head_1 && head_1->value )
+		head_1->value = getcwd(NULL, 0);
 }
 
 int	cd_1(void)

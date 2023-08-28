@@ -138,7 +138,7 @@ char	*ft_value(char *str);
 char	*ft_strchr(const char *s, int c);
 char	*find_path(void);
 int		ft_execve_valid_path(t_cmd *data);
-void	ft_execve(t_cmd *data);
+int		ft_execve(t_cmd *data, char **envp);
 void	*ft_calloc(size_t count, size_t size);
 t_env	*variable_environnement(char **env);
 int		keycmp(t_cmd *head, char *key, char *value);

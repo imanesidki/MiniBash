@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:26:51 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/22 00:29:36 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/28 23:25:29 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,30 +26,18 @@ char	*find_path(void)
 	return (NULL);
 }
 
-void	ft_execve(t_cmd *data)
+int	ft_execve(t_cmd *data,char **envp)
 {
-	char	**envp;
 
 	if (!data || !data->cmd || !*data->cmd)
-		return ;
-	envp = env_to_char();
-	if (ft_strchr(*data->cmd, '/'))
-	{
-		if (access(*data->cmd, F_OK) == 0)
-		{
-			execve(*data->cmd, data->cmd, envp);
-			exit(1);
-		}
-	}
+		return (1);
 	data->join = ft_strjoin(data->join, *data->cmd);
 	if (access(data->join, F_OK) == 0)
 	{
-		if (execve(data->join, data->cmd, envp) == -1)
-		{
-			perror("minishell ");
-			exit(1);
-		}
+		execve(data->join, data->cmd, envp);
+		return (perror("minishell "), exit(1), 1);
 	}
+	return(0);
 }
 
 int	ft_execve_valid_path(t_cmd *data)
@@ -57,21 +45,28 @@ int	ft_execve_valid_path(t_cmd *data)
 	int		i;
 	char	*path;
 	char	**split_path;
+	char	**envp;
 
 	i = 0;
-	path = find_path();
 	if (!data || !data->cmd || !*data->cmd)
 		return (1);
+	envp =  env_to_char();
+	if(data->cmd && data->cmd[0] && (data->cmd[0][0] == '/' || data->cmd[0][0] == '.' ))
+	{
+		execve(*data->cmd, data->cmd, envp);
+		return (perror("minishell "), exit(1), 1);
+	}
+	path = find_path();
 	if (!path)
 	{
-		perror("minishell ");
-		exit(1);
+		ft_putstr_fd(2, "minishell : No such file or directory\n");
+		exit(127);
 	}
 	split_path = ft_split(path, ':');
 	while (split_path[i])
 	{
 		data->join = ft_strjoin(split_path[i], "/");
-		ft_execve(data);
+		ft_execve(data, envp);
 		i++;
 	}
 	ft_putstr_fd(2, "minishell : command not found\n");
