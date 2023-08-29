@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 18:26:24 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/29 03:03:09 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/29 05:37:43 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1154,9 +1154,11 @@ t_cmd	*parsing(char *input)
 	delete_quotes(&l);
 	fd_in_herdoc = ft_heredoc(&l);
 	if (fd_in_herdoc == -1)
+	{
+		if (ft_parser(&l))
+			return (g_glb.exit_status = 258, ft_lstclear_lex(&l), NULL);
 		return (ft_lstclear_lex(&l), NULL);
-	if (ft_parser(&l))
-		return (g_glb.exit_status = 258, ft_lstclear_lex(&l), NULL);
+	}
 	ft_expand(&l);
 	ft_split_pipe(&l, &cmd);
 	redirections(&l, &cmd, fd_in_herdoc);
