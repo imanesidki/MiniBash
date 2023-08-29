@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:26:51 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/28 23:25:29 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/29 04:23:25 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,13 @@ int	ft_execve_valid_path(t_cmd *data)
 	if(data->cmd && data->cmd[0] && (data->cmd[0][0] == '/' || data->cmd[0][0] == '.' ))
 	{
 		execve(*data->cmd, data->cmd, envp);
-		return (perror("minishell "), exit(1), 1);
+		return (perror("minishell "), g_glb.exit_status = 127, exit(1), 1);
 	}
 	path = find_path();
 	if (!path)
 	{
 		ft_putstr_fd(2, "minishell : No such file or directory\n");
-		exit(127);
+		exit(1);
 	}
 	split_path = ft_split(path, ':');
 	while (split_path[i])
@@ -100,14 +100,20 @@ void	ft_process(t_cmd *data, int fd[2])
 {
 	(void)fd;
 	if (data->fd[0] != -2)
+	{
 		dup2(data->fd[0], 0);
+		close(data->fd[0]);
+	}
 	if (data->fd[1] != -2)
+	{
 		dup2(data->fd[1], 1);
+		close(data->fd[1]);
+	}
 	if (!is_builting(data))
 	{
 		execution(&data);
 		exit(0);
 	}
-	else
+	else if (data->cmd)
 		ft_execve_valid_path(data);
 }

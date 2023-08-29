@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 18:26:24 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/28 08:53:23 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/29 03:03:09 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -706,6 +706,7 @@ int	ft_heredoc(t_lexer **head)
 	int		tt;
 	int		fd_return;
 
+	fd_return = -2;
 	loop = *head;
 	tmp = NULL;
 	while (loop)

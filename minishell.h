@@ -152,7 +152,7 @@ void	execution(t_cmd **cmd);
 int		execution_and_redirection(t_cmd *data);
 void	ft_process(t_cmd *data, int fd[2]);
 /*************************************************/
-void	main_init(char **env);
+int		main_init(char **env, int ac);
 int		protection_input(char *input);
 t_token	which_token(char c1, char c2);
 void	assign_tok(t_lexer *tmp, t_token *tok);

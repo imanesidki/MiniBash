@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 00:53:28 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/28 23:13:15 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/29 05:06:37 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	pwd_cmd(void)
 
 void	unset_middle(t_cmd **data, t_env **env, int *m)
 {
-	while ((*env)->next->next && (*data)->cmd && *(*data)->cmd)
+	while ((*env)->next && (*env)->next->next && (*data)->cmd && *(*data)->cmd)
 	{
 		if (*(*data)->cmd && (*env)->next->key
 			&& !ft_strcmp(*(*data)->cmd, (*env)->next->key))

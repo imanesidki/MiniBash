@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 01:28:10 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/28 08:51:32 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/29 04:19:48 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ void	exex_with_pipe_middle_utils(t_cmd **data, int pid, int *fd)
 	if ((*data)-> cmd && !ft_strcmp(*(*data)->cmd, ""))
 	{
 		ft_putstr_fd(2, "minishell : command not found\n");
+		g_glb.exit_status = 127; 
 		i = 1;
 	}
-	if (i == 0)
+	if (i == 0 && (*data)->cmd)
 	{
 		pid = fork();
 		if (pid == 0)
@@ -60,13 +61,25 @@ int	exec_with_pipe_last(t_cmd *data)
 
 	if (data->fd[0] == -1 || data->fd[1] == -1)
 		return (-1);
+	if (data-> cmd && !ft_strcmp(*data->cmd, ""))
+	{
+		ft_putstr_fd(2, "minishell : command not found\n");
+		g_glb.exit_status = 127;
+		return(1);
+	}
 	pid = fork();
 	if (pid == 0)
 	{
 		if (data->fd[1] != -2)
+		{
 			dup2(data->fd[1], 1);
+			close(data->fd[1]);
+		}
 		if (data->fd[0] != -2)
+		{
 			dup2(data->fd[0], 0);
+			close(data->fd[0]);
+		}
 		if (!is_builting(data))
 			return (execution(&data), exit(g_glb.exit_status), 0);
 		ft_execve_valid_path(data);
