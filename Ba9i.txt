@@ -26,3 +26,6 @@ syntax error 255
 redirections 1 
 ctl c 1
 ctrl d 1
+
+shlvl 
+<0 and >999 must go to 2

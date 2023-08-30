@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 03:46:38 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/28 23:07:11 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/30 21:07:56 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	echo_cmd(t_cmd **data)
 
 void	cd_cmd(t_cmd **data)
 {
+	char *str;
+
 	(*data)->cmd++;
 	if (*(*data)->cmd)
 	{
@@ -53,8 +55,12 @@ void	cd_cmd(t_cmd **data)
 				return ;
 		}
 		else
-			if (chdir(*(*data)->cmd) < 0 || !getcwd(NULL, 0))
-				return (perror("minishell "));
+		{
+			str = getcwd(NULL, 0);
+			if (chdir(*(*data)->cmd) < 0 || !str)
+				return (free(str), perror("minishell "));
+			free(str);
+		}
 	}
 	else
 		if (cd_1() == 1)

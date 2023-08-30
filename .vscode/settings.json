@@ -23,6 +23,9 @@
         "tuple": "c",
         "type_traits": "c",
         "__locale": "c",
-        "ios": "c"
+        "ios": "c",
+        "istream": "c",
+        "utility": "c",
+        "sstream": "c"
     }
 }

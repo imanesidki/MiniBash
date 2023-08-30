@@ -56,10 +56,14 @@ void	add_pwd(void)
 			break ;
 		head_1 = head_1->next;
 	}
+
 	if (head && head_1 &&  head->key && head_1->value && head->value && head_1->key)
 		head->value = head_1->value;
-	if (head_1 && head_1->value )
-		head_1->value = getcwd(NULL, 0);
+	if (head_1 && head_1->value)
+	{
+		head_1->value = getcwd(NULL, 0);//the same for cd ..
+		free(head_1->value);
+	}
 }
 
 int	cd_1(void)

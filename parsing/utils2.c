@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 18:26:24 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/29 05:37:43 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/30 15:00:22 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1146,7 +1146,7 @@ t_cmd	*parsing(char *input)
 	l = NULL;
 	cmd = NULL;
 	s = ft_strtrim(input, " \t\v\n\r\f");
-	ft_free(input);
+	free(input);// here , we changed ft_free to free
 	ft_lexer(s, &l);
 	ft_free(s);
 	if (ft_check_quotes(&l))
@@ -1159,6 +1159,8 @@ t_cmd	*parsing(char *input)
 			return (g_glb.exit_status = 258, ft_lstclear_lex(&l), NULL);
 		return (ft_lstclear_lex(&l), NULL);
 	}
+	if (ft_parser(&l))
+		return (g_glb.exit_status = 258, ft_lstclear_lex(&l), NULL);
 	ft_expand(&l);
 	ft_split_pipe(&l, &cmd);
 	redirections(&l, &cmd, fd_in_herdoc);
