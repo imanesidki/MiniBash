@@ -26,6 +26,7 @@ SRCS =	main.c				\
 		execution/builtins.c			\
 		execution/builtins_ex.c			\
 		execution/builtins_utils.c			\
+		execution/builtins_utils2.c	\
 		execution/key_and_value.c			\
 		execution/builtins_utils_ex.c			\
 		execution/export_list.c			\

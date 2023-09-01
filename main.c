@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/30 15:07:17 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/01 20:08:35 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,14 @@
 
 int	main_init(char **env, int ac)
 {
+	char	*test;
+
 	if (ac != 1)
-		return(ft_putstr_fd(2, "minishell: No such file or directory\n"), -1);
-	char *test;
-		test = malloc(1);
+	{
+		ft_putstr_fd(2, "minishell: No such file or directory\n");
+		return (-1);
+	}
+	test = malloc(1);
 	if (!test)
 		exit(1);
 	free(test);
@@ -41,15 +45,14 @@ int	protection_input(char *input)
 	return (0);
 }
 
-int	main(int ac, char **av, char **env)   //exit after ft_malloc in parsing and execution
+int	main(int ac, char **av, char **env)//exit after ft_malloc in parsing and execution
 {
 	char	*input;
 	t_cmd	*cmd;
 
-	(void) ac;
 	(void) av;
 	if (main_init(env, ac) == -1)
-		return(1);
+		return (1);
 	while (1)
 	{
 		rl_catch_signals = 0;
@@ -61,8 +64,7 @@ int	main(int ac, char **av, char **env)   //exit after ft_malloc in parsing and 
 			add_history(input);
 		cmd = parsing(input);
 		if (cmd == NULL)
-			continue;
-		// print_cmd_linked_list(&cmd);
+			continue ;
 		execution_and_redirection(cmd);
 		if (!g_glb.opn_fls)
 			g_glb.exit_status = 0; // should rather be done at (exit and echo) in execution

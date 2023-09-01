@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 00:53:28 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/29 05:06:37 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/01 19:45:47 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	pwd_cmd(void)
 				break ;
 			head = head->next;
 		}
-		if(head && head->key && head->value)
+		if (head && head->key && head->value)
 			printf("%s\n", head->value);
 	}
 }
@@ -65,4 +65,27 @@ void	unset_last_ex(t_cmd **data, t_env **env)
 		unset_last(&(*data), env);
 	else
 		(*data)->cmd++;
+}
+
+void	cd_cmd_if(t_cmd *data)
+{
+	char	*str;
+
+	if (!ft_strcmp(*data->cmd, "~"))
+	{
+		if (cd_1() == 1)
+			return ;
+	}
+	else if (!ft_strcmp(*data->cmd, "-"))
+	{
+		if (cd_2() == 1)
+			return ;
+	}
+	else
+	{
+		str = getcwd(NULL, 0);
+		if (chdir(*data->cmd) < 0 || !str)
+			return (free(str), perror("minishell "));
+		free(str);
+	}
 }

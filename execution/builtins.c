@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 03:46:38 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/01 02:34:20 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/01 19:42:11 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,28 +35,6 @@ void	echo_cmd(t_cmd **data)
 	}
 	else
 		printf("\n");
-}
-void	cd_cmd_if(t_cmd *data)
-{
-	char	*str;
-
-	if (!ft_strcmp(*data->cmd, "~"))
-	{
-		if (cd_1() == 1)
-			return ;
-	}
-	else if (!ft_strcmp(*data->cmd, "-"))
-	{
-		if (cd_2() == 1)
-			return ;
-	}
-	else
-	{
-		str = getcwd(NULL, 0);
-		if (chdir(*data->cmd) < 0 || !str)
-			return (free(str), perror("minishell "));
-		free(str);
-	}
 }
 
 void	cd_cmd(t_cmd **data)
@@ -109,33 +87,9 @@ void	export_cmd(t_cmd *data)
 
 void	unset_cmd(t_cmd *data)
 {
-	t_env	*env;
-	int		m;
-
 	data->cmd++;
 	if (*data->cmd)
-	{
-		while (*data->cmd)
-		{
-			env = g_glb.env;
-			if(env)
-			{
-				m = 0;
-				if (parsing_unset(&data) == -1)
-					continue ;
-				if ((*data->cmd && env->key) && !ft_strcmp(*data->cmd, env->key))
-				{
-					unset_first(&data);
-					continue ;
-				}
-				unset_middle(&data, &env, &m);
-				if (m == 0)
-					unset_last_ex(&data, &env);
-			}
-			else
-				break;
-		}
-	}
+		unset_cmd_if(&data);
 	else
 		return ;
 }

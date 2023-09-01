@@ -39,30 +39,29 @@ void	echo_utils(t_cmd **data, int *i, int *j)
 
 void	add_pwd(void)
 {
-	t_env	*head;
-	t_env	*head_1;
+	t_env	*h1;
+	t_env	*h;
 
-	head = g_glb.env;
-	while (head)
+	h1 = g_glb.env;
+	while (h1)
 	{
-		if (head->key && head->value && !ft_strcmp(head->key, "OLDPWD"))
+		if (h1->key && h1->value && !ft_strcmp(h1->key, "OLDPWD"))
 			break ;
-		head = head->next;
+		h1 = h1->next;
 	}
-	head_1 = g_glb.env;
-	while (head_1)
+	h = g_glb.env;
+	while (h)
 	{
-		if (head_1->key && head_1->value && !ft_strcmp(head_1->key, "PWD"))
+		if (h->key && h->value && !ft_strcmp(h->key, "PWD"))
 			break ;
-		head_1 = head_1->next;
+		h = h->next;
 	}
-
-	if (head && head_1 &&  head->key && head_1->value && head->value && head_1->key)
-		head->value = head_1->value;
-	if (head_1 && head_1->value)
+	if (h1 && h && h1->key && h->value && h1->value && h->key)
+		h1->value = h->value;
+	if (h && h->value)
 	{
-		head_1->value = getcwd(NULL, 0);//the same for cd ..
-		free(head_1->value);
+		h->value = getcwd(NULL, 0);
+		free(h->value);
 	}
 }
 

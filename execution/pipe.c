@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 01:28:10 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/01 02:28:20 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/01 20:02:44 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,20 @@ void	exec_with_pipe_middle(t_cmd **data)
 	}
 }
 
+void	check_redirections(t_cmd *data)
+{
+	if (data->fd[1] != -2)
+	{
+		dup2(data->fd[1], 1);
+		close(data->fd[1]);
+	}
+	if (data->fd[0] != -2)
+	{
+		dup2(data->fd[0], 0);
+		close(data->fd[0]);
+	}
+}
+
 int	exec_with_pipe_last(t_cmd *data)
 {
 	int	pid;
@@ -65,21 +79,12 @@ int	exec_with_pipe_last(t_cmd *data)
 	{
 		ft_putstr_fd(2, "minishell : command not found\n");
 		g_glb.exit_status = 127;
-		return(1);
+		return (1);
 	}
 	pid = fork();
 	if (pid == 0)
 	{
-		if (data->fd[1] != -2)
-		{
-			dup2(data->fd[1], 1);
-			close(data->fd[1]);
-		}
-		if (data->fd[0] != -2)
-		{
-			dup2(data->fd[0], 0);
-			close(data->fd[0]);
-		}
+		check_redirections(data);
 		if (!is_builting(data))
 			return (execution(&data), exit(g_glb.exit_status), 0);
 		ft_execve_valid_path(data);
