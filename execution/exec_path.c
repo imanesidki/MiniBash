@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:26:51 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/30 20:49:34 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/01 02:26:11 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,7 @@ int	ft_execve_valid_path(t_cmd *data)
 	}
 	path = find_path();
 	if (!path)
-	{
-		ft_putstr_fd(2, "minishell : No such file or directory\n");
-		exit(1);
-	}
+		return(ft_putstr_fd(2, "minishell : No such file or directory\n"), exit(1), 1);
 	split_path = ft_split(path, ':');
 	while (split_path[i])
 	{
@@ -69,9 +66,7 @@ int	ft_execve_valid_path(t_cmd *data)
 		ft_execve(data, envp);
 		i++;
 	}
-	ft_putstr_fd(2, "minishell : command not found\n");
-	exit(127);
-	return (0);
+	return (ft_putstr_fd(2, "minishellf : command not found\n"), g_glb.exit_status = 127, exit(127), 0);
 }
 
 void	execution(t_cmd **node)

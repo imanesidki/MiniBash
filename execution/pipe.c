@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 01:28:10 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/29 04:19:48 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/01 02:28:20 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	exex_with_pipe_middle_utils(t_cmd **data, int pid, int *fd)
 	if ((*data)-> cmd && !ft_strcmp(*(*data)->cmd, ""))
 	{
 		ft_putstr_fd(2, "minishell : command not found\n");
-		g_glb.exit_status = 127; 
+		g_glb.exit_status = 127;
 		i = 1;
 	}
 	if (i == 0 && (*data)->cmd)

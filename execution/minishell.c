@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:11:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/29 04:17:06 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/01 02:30:47 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,6 @@ int	execution_and_redirection(t_cmd *data)
 	close(in);
 	dup2(out, 1);
 	close(out);
+	WIFEXITED(pid);
 	return (0);
 }

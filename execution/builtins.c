@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 03:46:38 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/30 21:07:56 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/01 02:34:20 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,34 @@ void	echo_cmd(t_cmd **data)
 	else
 		printf("\n");
 }
+void	cd_cmd_if(t_cmd *data)
+{
+	char	*str;
+
+	if (!ft_strcmp(*data->cmd, "~"))
+	{
+		if (cd_1() == 1)
+			return ;
+	}
+	else if (!ft_strcmp(*data->cmd, "-"))
+	{
+		if (cd_2() == 1)
+			return ;
+	}
+	else
+	{
+		str = getcwd(NULL, 0);
+		if (chdir(*data->cmd) < 0 || !str)
+			return (free(str), perror("minishell "));
+		free(str);
+	}
+}
 
 void	cd_cmd(t_cmd **data)
 {
-	char *str;
-
 	(*data)->cmd++;
 	if (*(*data)->cmd)
-	{
-		if (!ft_strcmp(*(*data)->cmd, "~"))
-		{
-			if (cd_1() == 1)
-				return ;
-		}
-		else if (!ft_strcmp(*(*data)->cmd, "-"))
-		{
-			if (cd_2() == 1)
-				return ;
-		}
-		else
-		{
-			str = getcwd(NULL, 0);
-			if (chdir(*(*data)->cmd) < 0 || !str)
-				return (free(str), perror("minishell "));
-			free(str);
-		}
-	}
+		cd_cmd_if(*data);
 	else
 		if (cd_1() == 1)
 			return ;
