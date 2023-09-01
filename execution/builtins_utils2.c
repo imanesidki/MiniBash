@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 19:43:05 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/01 19:58:47 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 00:38:35 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	ft_execve(t_cmd *data, char **envp)
 	if (access(data->join, F_OK) == 0)
 	{
 		execve(data->join, data->cmd, envp);
+		g_glb.exit_status = 1;
 		return (perror("minishell "), exit(1), 1);
 	}
 	return (0);

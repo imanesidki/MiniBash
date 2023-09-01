@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/01 20:08:35 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 00:44:35 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ int	main(int ac, char **av, char **env)//exit after ft_malloc in parsing and exe
 		if (cmd == NULL)
 			continue ;
 		execution_and_redirection(cmd);
-		if (!g_glb.opn_fls)
-			g_glb.exit_status = 0; // should rather be done at (exit and echo) in execution
+		// if (!g_glb.opn_fls)
+		// 	g_glb.exit_status = 0; // should rather be done at (exit and echo) in execution
 		ft_lstclear_cmd(&cmd);
 	}
 	clear_history();

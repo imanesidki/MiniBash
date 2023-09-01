@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:26:51 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/01 19:58:41 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 00:45:42 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	check_path(t_cmd *data, char **envp)
 	if (!path)
 	{
 		ft_putstr_fd(2, "minishell : No such file or directory\n");
+		g_glb.exit_status = 1;
 		exit(1);
 	}
 	split_path = ft_split(path, ':');
@@ -59,7 +60,7 @@ int	ft_execve_valid_path(t_cmd *data)
 	{
 		execve(*data->cmd, data->cmd, envp);
 		perror("minishell ");
-		g_glb.exit_status = 127;
+		g_glb.exit_status = 1;
 		exit(1);
 	}
 	check_path(data, envp);
@@ -75,6 +76,7 @@ void	execution(t_cmd **node)
 	data = *node;
 	if (!data || !data->cmd || !data->cmd[0])
 		return ;
+	g_glb.exit_status = 0;
 	if (data->cmd && *data->cmd && !ft_strcmp(*data->cmd, "echo"))
 		echo_cmd(&data);
 	else if (!ft_strcmp(*data->cmd, "cd"))

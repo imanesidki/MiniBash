@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:35:50 by isidki            #+#    #+#             */
-/*   Updated: 2023/08/18 00:17:14 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 00:43:46 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,5 +150,6 @@ void	ft_putstring_fd(int fd, char *s1, char *s2, int i)
 	write(fd, ": ", 1);
 	write(fd, s2, len2);
 	write(fd, "\n", 1);
+	printf("hna|%d|\n",g_glb.exit_status);
 	g_glb.exit_status = i;
 }

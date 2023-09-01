@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 01:28:10 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/01 20:02:44 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 00:52:06 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,8 @@ void	check_redirections(t_cmd *data)
 	}
 }
 
-int	exec_with_pipe_last(t_cmd *data)
+int	exec_with_pipe_last(t_cmd *data, int *pid)
 {
-	int	pid;
-
 	if (data->fd[0] == -1 || data->fd[1] == -1)
 		return (-1);
 	if (data-> cmd && !ft_strcmp(*data->cmd, ""))
@@ -81,8 +79,8 @@ int	exec_with_pipe_last(t_cmd *data)
 		g_glb.exit_status = 127;
 		return (1);
 	}
-	pid = fork();
-	if (pid == 0)
+	*pid = fork();
+	if (*pid == 0)
 	{
 		check_redirections(data);
 		if (!is_builting(data))
@@ -92,10 +90,8 @@ int	exec_with_pipe_last(t_cmd *data)
 	return (0);
 }
 
-int	exec_with_no_pipe(t_cmd *data)
+int	exec_with_no_pipe(t_cmd *data, int *pid)
 {
-	int	pid;
-
 	if (data->cmd && !ft_strcmp(*data->cmd, ""))
 		return (-2);
 	if (data->fd[0] == -1 || data->fd[1] == -1)
@@ -111,11 +107,11 @@ int	exec_with_no_pipe(t_cmd *data)
 		close(data->fd[0]);
 	}
 	if (!is_builting(data))
-		execution(&data);
+		return(execution(&data), 3);
 	else if (data->cmd)
 	{
-		pid = fork();
-		if (pid == 0)
+		*pid = fork();
+		if (*pid == 0)
 			ft_execve_valid_path(data);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:11:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/01 20:00:16 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 00:53:31 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	execution_and_redirection(t_cmd *data)
 	int	out;
 	int	pid;
 
+	pid = -1;
 	in = dup(0);
 	out = dup(1);
 	signal(SIGINT, handle);
@@ -37,20 +38,29 @@ int	execution_and_redirection(t_cmd *data)
 	if (data->next)
 	{
 		exec_with_pipe_middle(&data);
-		exec_with_pipe_last(data);
+		exec_with_pipe_last(data, &pid);
 	}
 	else
 	{
-		if (exec_with_no_pipe(data) == -2)
+		int id = exec_with_no_pipe(data, &pid);
+		if (id == -2)
 			ft_putstr_fd(2, "minishell : command not found\n");
-		g_glb.exit_status = 127;
+		else if (id == 3)
+			return (0);
 	}
-	while (wait (&pid) > 0)
-		;
 	dup2(in, 0);
 	close(in);
 	dup2(out, 1);
 	close(out);
-	WIFEXITED(pid);
+	int    i;
+    waitpid(pid, &i, 0);
+    while (wait(NULL) > 0);
+    if (WIFEXITED(i))
+       g_glb.exit_status = WEXITSTATUS(i);
+    else if (WIFSIGNALED(i))
+    {
+        int num = WTERMSIG(i) + 128;
+        g_glb.exit_status = num;
+    }
 	return (0);
 }
