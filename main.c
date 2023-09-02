@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/02 04:39:07 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 20:34:49 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ void	shell_level()
 		{
 			int i = ft_atoi(head->value);
 			i++;
-			head->value = ft_itoa(i);
+			if (i > 999 || i < 0)
+				head->value = ft_itoa(2);//add 0 or 2
+			else
+				head->value = ft_itoa(i);
 			break;
 		}
 		head = head->next;
