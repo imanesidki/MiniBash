@@ -132,6 +132,7 @@ int			exec_with_no_pipe(t_cmd *data, int *pid);
 void		cd_cmd_if(t_cmd *data);
 void		unset_cmd_if(t_cmd **data);
 void		check_path(t_cmd *data, char **envp);
+void		shell_level(void);
 //=============================================>>>>>>>>>>>>>>>>>>>>
 t_env		*duplicate_env(void);
 char		**env_to_char(void);

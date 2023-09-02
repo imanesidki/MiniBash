@@ -6,11 +6,29 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/02 03:37:43 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 04:39:07 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	shell_level()
+{
+	t_env	*head;
+
+	head = g_glb.env;
+	while (head)
+	{
+		if (!ft_strcmp(head->key, "SHLVL"))
+		{
+			int i = ft_atoi(head->value);
+			i++;
+			head->value = ft_itoa(i);
+			break;
+		}
+		head = head->next;
+	}
+}
 
 int	main_init(char **env, int ac)
 {
@@ -30,6 +48,7 @@ int	main_init(char **env, int ac)
 	g_glb.opn_fls = 0;
 	if (env && env[0])
 		variable_environnement(env);
+	shell_level();
 	return (0);
 }
 
