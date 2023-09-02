@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 19:43:05 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/02 00:38:35 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 04:00:41 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,44 @@ int	ft_execve(t_cmd *data, char **envp)
 		return (perror("minishell "), exit(1), 1);
 	}
 	return (0);
+}
+
+void	exit_cmd_utils(t_cmd *data)
+{
+	if (*data->cmd)
+	{
+		if (**data->cmd > '9' || **data->cmd < '0')
+		{
+			printf("exit\n");
+			ft_putstr_fd(2, "minishell : exit: $: numeric argument required\n");
+			g_glb.exit_status = 255;
+			return ;
+		}
+		else
+		{
+			printf("exit\n");
+			g_glb.exit_status = (char)ft_atoi(*data->cmd);
+			exit((char)ft_atoi(*data->cmd));
+		}
+	}
+	else
+	{
+		printf("exit\n");
+		g_glb.exit_status = 1;
+		exit(1);
+	}
+}
+
+void	exit_cmd(t_cmd *data)
+{
+	data->cmd++;
+	if (data->cmd[0] && data->cmd[1])
+	{
+		printf("exit\n");
+		ft_putstr_fd(2, "minishell : exit: too many arguments\n");
+		g_glb.exit_status = 1;
+		return ;
+	}
+	else
+		exit_cmd_utils(data);
 }

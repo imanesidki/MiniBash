@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:26:51 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/02 03:29:48 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 03:40:26 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,33 +67,6 @@ int	ft_execve_valid_path(t_cmd *data)
 	ft_putstr_fd(2, "minishellf : command not found\n");
 	g_glb.exit_status = 127;
 	exit(127);
-}
-
-void	exit_cmd(t_cmd *data)
-{
-	data->cmd++;
-	if (data->cmd[0] && data->cmd[1])
-	{
-		printf("exit\n");
-		ft_putstr_fd(2, "minishell : exit: too many arguments\n");
-		g_glb.exit_status = 1;
-		return ;
-	}
-	else
-	{
-		if (*data->cmd)
-		{
-			printf("exit\n");
-			g_glb.exit_status = (char)ft_atoi(*data->cmd);
-			exit((char)ft_atoi(*data->cmd));
-		}
-		else
-		{
-			printf("exit\n");
-			g_glb.exit_status = 1;
-			exit(1);
-		}
-	}
 }
 
 void	execution(t_cmd **node)

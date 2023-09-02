@@ -96,6 +96,7 @@ struct s_garbage
 t_glb	g_glb;
 
 /*************************************************/
+void		clear_env(void);
 t_cmd		*ft_lstnew_1(void *content, t_cmd *data);
 int			ft_isspace(char *input);
 void		ft_lstadd_back_1(t_cmd **lst, t_cmd *new);

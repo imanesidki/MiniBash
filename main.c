@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/02 00:44:35 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 03:37:43 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,14 @@ int	protection_input(char *input)
 		return (free(input), 1);
 	return (0);
 }
+void	clear_env()
+{
+	while (g_glb.env)
+	{
+		free(g_glb.env);
+		g_glb.env = g_glb.env->next;
+	}
+}
 
 int	main(int ac, char **av, char **env)//exit after ft_malloc in parsing and execution
 {
@@ -71,5 +79,6 @@ int	main(int ac, char **av, char **env)//exit after ft_malloc in parsing and exe
 		ft_lstclear_cmd(&cmd);
 	}
 	clear_history();
+	clear_env();
 	return (0);
 }

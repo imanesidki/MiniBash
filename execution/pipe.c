@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 01:28:10 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/02 00:52:06 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 03:41:10 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	exec_with_no_pipe(t_cmd *data, int *pid)
 		close(data->fd[0]);
 	}
 	if (!is_builting(data))
-		return(execution(&data), 3);
+		return (execution(&data), 3);
 	else if (data->cmd)
 	{
 		*pid = fork();

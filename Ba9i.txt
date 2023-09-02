@@ -1,18 +1,10 @@
 
-
-exit
-
 for test 
 export | tr "=" " "  | awk '{print$3}' | tr "\n" " "
 
-$?
-
-cmd not found --> 127
-no such file ---> 1
 syntax error 255
 redirections 1 
-ctl c 1
-ctrl d 1
+-----> ctrl d 1
 
 shlvl 
 <0 and >999 must go to 2

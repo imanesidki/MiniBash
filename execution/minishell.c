@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:11:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/02 03:04:23 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 03:44:37 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,29 @@ int	is_builting(t_cmd *data)
 	return (1);
 }
 
+void	ft_exit_status(int *pid)
+{
+	int	i;
+	int	num;
+
+	waitpid(*pid, &i, 0);
+	while (wait(NULL) > 0)
+		;
+	if (WIFEXITED(i))
+		g_glb.exit_status = WEXITSTATUS(i);
+	else if (WIFSIGNALED(i))
+	{
+		num = WTERMSIG(i) + 128;
+		g_glb.exit_status = num;
+	}
+}
+
 int	execution_and_redirection(t_cmd *data)
 {
 	int	in;
 	int	out;
 	int	pid;
+	int	id;
 
 	pid = -1;
 	in = dup(0);
@@ -42,7 +60,7 @@ int	execution_and_redirection(t_cmd *data)
 	}
 	else
 	{
-		int id = exec_with_no_pipe(data, &pid);
+		id = exec_with_no_pipe(data, &pid);
 		if (id == -2)
 			ft_putstr_fd(2, "minishell : command not found\n");
 		else if (id == 3)
@@ -52,15 +70,6 @@ int	execution_and_redirection(t_cmd *data)
 	close(in);
 	dup2(out, 1);
 	close(out);
-	int    i;
-    waitpid(pid, &i, 0);
-    while (wait(NULL) > 0);
-    if (WIFEXITED(i))
-       g_glb.exit_status = WEXITSTATUS(i);
-    else if (WIFSIGNALED(i))
-    {
-        int num = WTERMSIG(i) + 128;
-        g_glb.exit_status = num;
-    }
+	ft_exit_status(&pid);
 	return (0);
 }
