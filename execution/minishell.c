@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:11:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/02 00:53:31 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/02 03:04:23 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	is_builting(t_cmd *data)
 	if (!ft_strcmp(*data->cmd, "echo") || !ft_strcmp(*data->cmd, "cd") 
 		|| !ft_strcmp(*data->cmd, "env") || !ft_strcmp(*data->cmd, "export")
 		||!ft_strcmp(*data->cmd, "unset") || !ft_strcmp(*data->cmd, "exit") 
-		||!ft_strcmp(*data->cmd, "pwd"))
+		||!ft_strcmp(*data->cmd, "pwd") || !ft_strcmp(*data->cmd, "exit"))
 		return (0);
 	return (1);
 }

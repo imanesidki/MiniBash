@@ -152,6 +152,8 @@ void		exec_cmd(t_cmd *data);
 void		execution(t_cmd **cmd);
 int			execution_and_redirection(t_cmd *data);
 void		ft_process(t_cmd *data, int fd[2]);
+void		exit_cmd(t_cmd *data);
+int			ft_atoi(char *str);
 /*************************************************/
 int			main_init(char **env, int ac);
 int			protection_input(char *input);
