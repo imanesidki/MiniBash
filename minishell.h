@@ -96,11 +96,11 @@ struct s_garbage
 t_glb	g_glb;
 
 /*************************************************/
-void		clear_env(void);
 t_cmd		*ft_lstnew_1(void *content, t_cmd *data);
+t_env		*ft_lstnew_2(void *content, void *key, void *value);
+void		clear_env(void);
 int			ft_isspace(char *input);
 void		ft_lstadd_back_1(t_cmd **lst, t_cmd *new);
-t_env		*ft_lstnew_2(void *content, void *key, void *value);
 void		ft_lstadd_back_2(t_env **lst, t_env *new);
 int			ft_isalpha(int c);
 void		echo_cmd(t_cmd **data);
@@ -133,6 +133,7 @@ void		cd_cmd_if(t_cmd *data);
 void		unset_cmd_if(t_cmd **data);
 void		check_path(t_cmd *data, char **envp);
 void		shell_level(void);
+int			exec_with_or_without_pipe(t_cmd **data, int *pid);
 //=============================================>>>>>>>>>>>>>>>>>>>>
 t_env		*duplicate_env(void);
 char		**env_to_char(void);
@@ -235,5 +236,9 @@ void		*ft_malloc(size_t size);
 int			ft_heredoc(t_lexer **head);
 void		concat_between_qu(t_lexer *start, t_lexer *end, t_token tok);
 void		ft_free(void *ptr);
-
+int			ft_parser(t_lexer **head);
+void		ft_split_pipe(t_lexer **head, t_cmd **cmd);
+void		ft_delete_node(t_lexer **head, t_lexer *node);
+void		handle_delete_node(t_lexer **head, t_lexer *node);
+void		ft_sig_handler(int sig);
 #endif

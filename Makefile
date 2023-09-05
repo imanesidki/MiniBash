@@ -23,6 +23,20 @@ SRCS =	main.c				\
 		parsing/linked_list_cmd.c	\
 		parsing/linked_list_env.c		\
 		parsing/linked_list_lexer.c	\
+		parsing/utils3.c	\
+		parsing/utils4.c	\
+		parsing/utils5.c	\
+		parsing/utils6.c	\
+		parsing/utils7.c	\
+		parsing/utils8.c	\
+		parsing/utils9.c	\
+		parsing/utils10.c	\
+		parsing/her_doc.c	\
+		parsing/her_doc_utils.c	\
+		parsing/expand.c	\
+		parsing/split_pipe.c	\
+		parsing/syntax_error.c	\
+		parsing/redirection.c	\
 		execution/builtins.c			\
 		execution/builtins_ex.c			\
 		execution/builtins_utils.c			\

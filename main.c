@@ -6,28 +6,29 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/02 20:34:49 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 00:22:57 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	shell_level()
+void	shell_level(void)
 {
 	t_env	*head;
+	int		i;
 
 	head = g_glb.env;
 	while (head)
 	{
 		if (!ft_strcmp(head->key, "SHLVL"))
 		{
-			int i = ft_atoi(head->value);
+			i = ft_atoi(head->value);
 			i++;
 			if (i > 999 || i < 0)
-				head->value = ft_itoa(2);//add 0 or 2
+				head->value = ft_itoa(2);
 			else
 				head->value = ft_itoa(i);
-			break;
+			break ;
 		}
 		head = head->next;
 	}
@@ -66,7 +67,8 @@ int	protection_input(char *input)
 		return (free(input), 1);
 	return (0);
 }
-void	clear_env()
+
+void	clear_env(void)
 {
 	while (g_glb.env)
 	{
@@ -75,7 +77,7 @@ void	clear_env()
 	}
 }
 
-int	main(int ac, char **av, char **env)//exit after ft_malloc in parsing and execution
+int	main(int ac, char **av, char **env)
 {
 	char	*input;
 	t_cmd	*cmd;
@@ -96,8 +98,6 @@ int	main(int ac, char **av, char **env)//exit after ft_malloc in parsing and exe
 		if (cmd == NULL)
 			continue ;
 		execution_and_redirection(cmd);
-		// if (!g_glb.opn_fls)
-		// 	g_glb.exit_status = 0; // should rather be done at (exit and echo) in execution
 		ft_lstclear_cmd(&cmd);
 	}
 	clear_history();
