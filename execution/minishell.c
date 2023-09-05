@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:11:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 06:36:56 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 12:59:16 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ void	ft_exit_status(int *pid, int flag)
 	{
 		waitpid(*pid, &i, 0);
 		while (wait(NULL) > 0)
-		;
-	}
-	if (WIFEXITED(i))
-		g_glb.exit_status = WEXITSTATUS(i);
-	else if (WIFSIGNALED(i))
-	{
-		num = WTERMSIG(i) + 128;
-		g_glb.exit_status = num;
+			;
+		if (WIFEXITED(i))
+			g_glb.exit_status = WEXITSTATUS(i);
+		else if (WIFSIGNALED(i))
+		{
+			num = 0;
+			g_glb.exit_status = num;
+		}
 	}
 }
 
@@ -58,7 +58,11 @@ int	exec_with_or_without_pipe(t_cmd **data, int *pid)
 	{
 		id = exec_with_no_pipe(*data, pid);
 		if (id == -2)
+		{
 			ft_putstr_fd(2, "minishell : command not found\n");
+			g_glb.exit_status = 127;
+			return (0);
+		}
 		else if (id == 3)
 			return (0);
 	}
@@ -70,7 +74,7 @@ int	execution_and_redirection(t_cmd *data)
 	int	in;
 	int	out;
 	int	pid;
-	int flag;
+	int	flag;
 
 	flag = 0;
 	pid = -1;

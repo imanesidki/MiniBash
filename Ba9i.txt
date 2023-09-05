@@ -16,3 +16,8 @@ exit _status    168
 CTL \ QUIT 3
 
 cd 
+ls > tab "" | created ? for each tab 
+
+<< $"" 
+exit with 126 in permession denied 
+exit with max  long 

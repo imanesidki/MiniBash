@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/05 06:22:46 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 11:29:29 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ int	main(int ac, char **av, char **env)
 		if (cmd == NULL)
 			continue ;
 		execution_and_redirection(cmd);
+		// printf("exit = %d\n", g_glb.exit_status);
+		// g_glb.exit_status = 0;
 		ft_lstclear_cmd(&cmd);
 	}
 	clear_history();

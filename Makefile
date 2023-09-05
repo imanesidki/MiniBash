@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRCS =	main.c				\
+SRCS =	main.c		\
 		execution/minishell.c			\
 		execution/exec_path.c	\
 		execution/split.c		\

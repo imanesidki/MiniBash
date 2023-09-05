@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:26:51 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 07:52:22 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 12:40:08 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ void	execution(t_cmd **node)
 	g_glb.exit_status = 0;
 	if (data->cmd && *data->cmd && !ft_strcmp(*data->cmd, "echo"))
 		echo_cmd(&data);
-
 	else if (!ft_strcmp(*data->cmd, "cd"))
 		cd_cmd(&data);
 	else if (!ft_strcmp(*data->cmd, "env"))
@@ -89,7 +88,7 @@ void	execution(t_cmd **node)
 	else if (!ft_strcmp(*data->cmd, "unset"))
 		unset_cmd(data);
 	else if (!ft_strcmp(*data->cmd, "pwd"))
-		pwd_cmd(data);
+		pwd_cmd();
 	else if (!ft_strcmp(*data->cmd, "exit"))
 		exit_cmd(data);
 	return ;

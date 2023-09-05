@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 19:43:05 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/02 04:00:41 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 12:58:47 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,18 @@ void	exit_cmd(t_cmd *data)
 	}
 	else
 		exit_cmd_utils(data);
+}
+
+int	unset_parsing(char *str)
+{
+	if (!ft_isalpha(*str) && *str != '_')
+		return (1);
+	str++;
+	while (*str)
+	{
+		if (*str != '_' && !ft_isalnum(*str))
+			return (1);
+		str++;
+	}
+	return (0);
 }

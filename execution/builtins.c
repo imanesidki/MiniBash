@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 03:46:38 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 07:56:46 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 12:34:11 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,22 @@ void	echo_cmd(t_cmd **data)
 	}
 	else
 		printf("\n");
+	g_glb.exit_status = 0;
 }
 
 void	cd_cmd(t_cmd **data)
 {
 	(*data)->cmd++;
 	if (*(*data)->cmd)
-		cd_cmd_if(*data);
+	{
+		if (cd_cmd_if(*data) == 1)
+			return ;
+	}
 	else
+	{
 		if (cd_1() == 1)
 			return ;
+	}
 	add_pwd();
 }
 
