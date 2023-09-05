@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:26:51 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 12:40:08 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 19:36:54 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*find_path(void)
 	env = g_glb.env;
 	while (env)
 	{
-		if (!ft_strcmp(env->key, "PATH"))
+		if (!ft_strcmp(env->key, "PATH") && env->value)
 			return (env->value);
 		env = env->next;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 18:26:24 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/05 03:59:30 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 16:08:27 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_ambigs_redirect(t_lexer **head, t_lexer *dlr, t_lexer *word)
 		else if (dlr->prev)
 			dlr = dlr->prev;
 		if (dlr && (dlr->token == IN || dlr->token == OUT
-			|| dlr->token == APPEND))
+				|| dlr->token == APPEND))
 			dlr->fd = -3;
 	}
 	ft_delete_node(head, tmp);
@@ -36,7 +36,7 @@ void	empty_two_nodes(t_lexer **tmp)
 	ft_free((*tmp)->cmd);
 	(*tmp)->cmd = ft_strdup("");
 	ft_free((*tmp)->next->cmd);
-	(*tmp)->next->cmd = ft_strdup("");		
+	(*tmp)->next->cmd = ft_strdup("");
 	(*tmp) = (*tmp)->next;
 }
 
@@ -50,7 +50,7 @@ void	ft_file_redirect(t_lexer **head)
 	while (tmp)
 	{
 		if ((tmp->token == IN || tmp->token == OUT
-			|| tmp->token == APPEND || tmp->token == HEREDOC)
+				|| tmp->token == APPEND || tmp->token == HEREDOC)
 			&& tmp->next)
 		{
 			if (tmp->next->token == SPC)
@@ -58,7 +58,7 @@ void	ft_file_redirect(t_lexer **head)
 			else
 				tmp = tmp->next;
 			if (tmp && (tmp->token == WORD || tmp->token == DQU
-				|| tmp->token == SQU))
+					|| tmp->token == SQU))
 				tmp->token = FILENAME;
 		}
 		if (tmp)
@@ -72,13 +72,12 @@ t_cmd	*parsing(char *input)
 	t_lexer	*l;
 	t_cmd	*cmd;
 	int		fd_in_herdoc;
-	
+
 	l = NULL;
 	cmd = NULL;
 	s = ft_strtrim(input, " \t\v\n\r\f");
-	free(input);// here , we changed ft_free to free
+	free(input);
 	ft_lexer(s, &l);
-	ft_free(s);
 	if (ft_check_quotes(&l))
 		return (ft_lstclear_lex(&l), NULL);
 	delete_quotes(&l);
@@ -93,7 +92,5 @@ t_cmd	*parsing(char *input)
 		return (g_glb.exit_status = 258, ft_lstclear_lex(&l), NULL);
 	ft_expand(&l);
 	ft_split_pipe(&l, &cmd);
-	redirections(&l, &cmd, fd_in_herdoc);
-	ft_lstclear_lex(&l);
-	return (cmd);
+	return (redirections(&l, &cmd, fd_in_herdoc), ft_lstclear_lex(&l), cmd);
 }

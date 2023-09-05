@@ -45,6 +45,8 @@ SRCS =	main.c		\
 		execution/builtins_utils_ex.c			\
 		execution/export_list.c			\
 		execution/pipe.c			\
+		parsing/split_ls.c	\
+		parsing/split_white_spc.c
 
 READLINE = $(shell brew --prefix readline)
 NAME = mini.a

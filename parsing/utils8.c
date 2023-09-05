@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils8.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 03:29:48 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 03:35:39 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 16:13:56 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	l = 0;
 	str = (char *)ft_malloc(i + j + 1);
 	if (!str)
-		return (NULL);//exit if ft_malloc fails
+		return (NULL);
 	while (*s1)
 		str[l++] = *s1++;
 	while (*s2)
@@ -55,7 +55,7 @@ char	*ft_strtrim(char *s1, char *set)
 	return (ft_substr(s1, i, (len - i + 1)));
 }
 
-void	print_cmd_linked_list(t_cmd **head)//delete
+void	print_cmd_linked_list(t_cmd **head)
 {
 	t_cmd	*temp;
 	int		ii;
@@ -75,7 +75,7 @@ void	print_cmd_linked_list(t_cmd **head)//delete
 	printf("END\n");
 }
 
-void	print_linked_list(t_lexer **head) //delete
+void	print_linked_list(t_lexer **head)
 {
 	t_lexer	*temp;
 
@@ -86,19 +86,4 @@ void	print_linked_list(t_lexer **head) //delete
 		temp = temp->next;
 	}
 	printf("END\n");
-}
-
-void	print_linked_list_reverse(t_lexer **head) //delete
-{
-	t_lexer	*temp;
-
-	temp = *head;
-	while (temp && temp->next)
-		temp = temp->next;
-	while (temp)
-	{
-		printf("(%s, %d) -> ", temp->cmd, (int)temp->token);
-		temp = temp->prev;
-	}
-	printf("start\n");
 }

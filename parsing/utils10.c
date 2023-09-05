@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils10.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 03:39:54 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 03:40:55 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 15:54:10 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,5 @@ void	ft_lexer(char *input, t_lexer **head)
 	}
 	concat_word_lexer(head);
 	tokenize_redirections(head);
+	ft_free(input);
 }

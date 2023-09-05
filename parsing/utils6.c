@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils6.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 03:25:31 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 04:04:45 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 16:29:21 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ t_token	which_token(char c1, char c2)
 		return (IN);
 	if (c1 == '>')
 		return (OUT);
-	if (c1 == ' ')
+	if (c1 == ' ' || c1 == '\t' || c1 == '\v' || c1 == '\r'
+		|| c1 == '\n' || c1 == '\f')
 		return (SPC);
 	if (c1 == '$')
 		return (DLR);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_pipe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 03:48:40 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 03:49:39 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 16:15:52 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	split_cmd(t_lexer **tmp, int i, t_lexer *hold, char ***cmnd)
 	j = 0;
 	*cmnd = (char **)ft_malloc((sizeof(char *) * (i + 1)));
 	if (!(*cmnd))
-		return ; //exit
+		return ;
 	(*tmp) = hold;
 	while ((*tmp) && (*tmp)->token != PIPE)
 	{

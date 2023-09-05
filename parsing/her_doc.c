@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   her_doc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 03:42:42 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 03:52:28 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 16:08:45 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_lexer	*find_delimiter(t_lexer **head)
 	return (NULL);
 }
 
-int	ft_readline_herdc(int *tt, t_lexer **loop, t_lexer *tmp, int *fd_return)
+int	ft_readline_herdc(t_lexer **loop, t_lexer *tmp, int *fd_return)
 {
 	int		fds[2];
 	char	*line;
@@ -43,11 +43,8 @@ int	ft_readline_herdc(int *tt, t_lexer **loop, t_lexer *tmp, int *fd_return)
 		return (g_glb.exit_status = 1, -1);
 	line = readline("> ");
 	if (!line)
-	{
 		(*loop) = (*loop)->next;
-		*tt = 1;
-	}
-	while (line && ft_strcmp(line, tmp->cmd) && !*tt)
+	while (line && ft_strcmp(line, tmp->cmd))
 	{
 		if (!g_glb.dqu)
 			ft_check_expand_in_line(&line);
@@ -66,7 +63,6 @@ int	ft_heredoc(t_lexer **head)
 {
 	t_lexer	*tmp;
 	t_lexer	*loop;
-	int		tt;
 	int		fd_return;
 
 	fd_return = -2;
@@ -74,20 +70,19 @@ int	ft_heredoc(t_lexer **head)
 	tmp = NULL;
 	while (loop)
 	{
-		tt = 0;
 		tmp = ft_heredoc_delimiter(&loop);
 		signal(SIGINT, ft_sig_handler);
 		if (tmp)
 		{
-			if (ft_readline_herdc(&tt, &loop, tmp, &fd_return) == -1)
+			if (ft_readline_herdc(&loop, tmp, &fd_return) == -1)
 				return (-1);
 			if (tmp->next)
 				loop = tmp->next;
 			else
-				break;
+				break ;
 		}
 		else if (loop)
-			loop = loop->next;		
+			loop = loop->next;
 	}
 	return (fd_return);
 }

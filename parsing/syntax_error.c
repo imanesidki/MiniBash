@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 03:53:14 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 03:54:41 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 16:10:55 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	ft_syntax_error(t_lexer *tmp)
 			|| tmp->token == APPEND || tmp->token == HEREDOC
 			|| tmp->token == PIPE) && !(tmp->next))
 	{
-		ft_putstr_fd(2, "minishell: syntax error near unexpected token `newline'\n");
+		ft_putstr_fd(2, "minishell: syntax error ");
+		ft_putstr_fd(2, "near unexpected token `newline'\n");
 		return (1);
 	}
 	if (unexpected_tok(tmp))
