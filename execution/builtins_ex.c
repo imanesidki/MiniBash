@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 00:53:28 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/02 03:39:10 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 07:58:10 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@ void	ft_put_str_error(char *arg)
 	ft_putstr_fd(2, "' : not a valid identifier\n");
 }
 
-void	pwd_cmd(void)
+void	pwd_cmd(t_cmd *data)
 {
 	t_env	*head;
 	char	*pwd;
+	(void)data;
 
 	head = g_glb.env;
 	pwd = getcwd(NULL, 0);
@@ -88,7 +89,8 @@ void	cd_cmd_if(t_cmd *data)
 		{
 			free(str);
 			perror("minishell ");
-			return (g_glb.exit_status = 1, exit(1));
+			g_glb.exit_status = 1;
+			return ;
 		}
 		free(str);
 	}

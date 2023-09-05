@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 01:28:10 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/02 03:41:10 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 06:11:03 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int	exec_with_pipe_last(t_cmd *data, int *pid)
 
 int	exec_with_no_pipe(t_cmd *data, int *pid)
 {
+
 	if (data->cmd && !ft_strcmp(*data->cmd, ""))
 		return (-2);
 	if (data->fd[0] == -1 || data->fd[1] == -1)

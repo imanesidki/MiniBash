@@ -107,7 +107,7 @@ void		echo_cmd(t_cmd **data);
 void		cd_cmd(t_cmd **data);
 void		env_cmd(void);
 void		export_cmd(t_cmd *data);
-void		pwd_cmd(void);
+void		pwd_cmd(t_cmd *data);
 int			check_key(char *key);
 int			check_error(char *key, t_cmd *head);
 void		unset_cmd(t_cmd *data);

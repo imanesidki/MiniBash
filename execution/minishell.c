@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:11:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 00:33:04 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 06:36:56 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,17 @@ int	is_builting(t_cmd *data)
 	return (1);
 }
 
-void	ft_exit_status(int *pid)
+void	ft_exit_status(int *pid, int flag)
 {
 	int	i;
 	int	num;
 
-	waitpid(*pid, &i, 0);
-	while (wait(NULL) > 0)
+	if (flag == 0)
+	{
+		waitpid(*pid, &i, 0);
+		while (wait(NULL) > 0)
 		;
+	}
 	if (WIFEXITED(i))
 		g_glb.exit_status = WEXITSTATUS(i);
 	else if (WIFSIGNALED(i))
@@ -67,18 +70,20 @@ int	execution_and_redirection(t_cmd *data)
 	int	in;
 	int	out;
 	int	pid;
+	int flag;
 
+	flag = 0;
 	pid = -1;
 	in = dup(0);
 	out = dup(1);
 	signal(SIGINT, handle);
 	signal(SIGQUIT, handle);
 	if (!exec_with_or_without_pipe(&data, &pid))
-		return (0);
+		flag = 1;
 	dup2(in, 0);
 	close(in);
 	dup2(out, 1);
 	close(out);
-	ft_exit_status(&pid);
+	ft_exit_status(&pid, flag);
 	return (0);
 }

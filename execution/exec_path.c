@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:26:51 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/02 03:40:26 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/05 07:52:22 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	ft_execve_valid_path(t_cmd *data)
 		exit(1);
 	}
 	check_path(data, envp);
-	ft_putstr_fd(2, "minishellf : command not found\n");
+	ft_putstr_fd(2, "minishell : command not found\n");
 	g_glb.exit_status = 127;
 	exit(127);
 }
@@ -79,6 +79,7 @@ void	execution(t_cmd **node)
 	g_glb.exit_status = 0;
 	if (data->cmd && *data->cmd && !ft_strcmp(*data->cmd, "echo"))
 		echo_cmd(&data);
+
 	else if (!ft_strcmp(*data->cmd, "cd"))
 		cd_cmd(&data);
 	else if (!ft_strcmp(*data->cmd, "env"))
@@ -88,7 +89,7 @@ void	execution(t_cmd **node)
 	else if (!ft_strcmp(*data->cmd, "unset"))
 		unset_cmd(data);
 	else if (!ft_strcmp(*data->cmd, "pwd"))
-		pwd_cmd();
+		pwd_cmd(data);
 	else if (!ft_strcmp(*data->cmd, "exit"))
 		exit_cmd(data);
 	return ;

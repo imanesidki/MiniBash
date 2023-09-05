@@ -9,3 +9,10 @@ redirections 1
 shlvl 
 <0 and >999 must go to 2
 
+why global variables
+
+exit _status    168
+
+CTL \ QUIT 3
+
+cd 
