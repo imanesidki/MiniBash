@@ -6,7 +6,7 @@
 /*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/05 20:18:34 by isidki           ###   ########.fr       */
+/*   Updated: 2023/09/06 00:24:51 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,7 @@ int    main(int ac, char **av, char **env)
             continue ;
 		split_ls(&cmd);
         execution_and_redirection(cmd);
-		printf("hello1\n");
         ft_lstclear_cmd(&cmd);
-		printf("hello2\n");
     }
     clear_history();
     clear_env();
