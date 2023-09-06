@@ -6,116 +6,71 @@
 /*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 16:46:32 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/06 00:19:42 by isidki           ###   ########.fr       */
+/*   Updated: 2023/09/06 01:48:23 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*ft_strjoin_free(char *s1, char *s2)
+void	do_check_acces(t_cmd **tmp)
 {
-	char	*str;
+	char	**new_cmd;
+	t_cmd	*head;
 	int		i;
-	int		j;
-
-	i = -1;
-	j = 0;
-	if (!s1)
-		s1 = ft_strdup("");
-	if (!s2)
-		return (NULL);
-	str = ft_calloc(ft_strlen(s1) + ft_strlen(s2) + 1, 1);
-	if (!str)
-		return (NULL);
-	while (s1[++i] != '\0')
-		str[i] = s1[i];
-	while (s2[j] != '\0')
-		str[i++] = s2[j++];
-	ft_free(s1);
-	s1 = NULL;
-	return (str);
-}
-
-void	free_array2(char **str)
-{
-	int	i;
 
 	i = 0;
-	while (str[i])
+	head = *tmp;
+	new_cmd = ft_split_white_spc(head->cmd[0], " \t\v\n\r\f");
+	while (new_cmd[i])
+		i++;
+	if (i != 1)
 	{
-		ft_free(str[i]);
-		str[i] = NULL;
-		i++;	
+		free_array2(head->cmd);
+		head->cmd = ft_malloc(sizeof(char *) * (i + 1));
+		i = -1;
+		while (new_cmd[++i])
+			head->cmd[i] = ft_strdup(new_cmd[i]);
+		head->cmd[i] = NULL;
+		free_array(new_cmd);
 	}
-	if (str)
-		ft_free(str);
-	str = NULL;
+	else
+		free_array(new_cmd);
 }
 
-void	split_ls(t_cmd **cmd)
+void	split_ls(t_cmd **node)
 {
 	t_cmd	*head;
-	char	**new_cmd;
-	int		i;
 
-	head = *cmd;
+	if (!(*node)->cmd || !(*node)->cmd[0])
+		return ;
+	head = *node;
 	while (head)
 	{
 		if (head && head->cmd && head->cmd[0] && !head->cmd[1])
 		{
 			if (check_access(head->cmd[0]) == 1)
-			{
-				i = 0;
-				new_cmd = ft_split_white_spc(head->cmd[0], " \t\v\n\r\f");
-				while (new_cmd[i])
-					i++;
-				free_array2(head->cmd);
-				head->cmd = ft_malloc(sizeof(char *) * (i + 1));
-				i = -1;
-				while (new_cmd[++i])
-					head->cmd[i] = ft_strdup(new_cmd[i]);
-				head->cmd[i] = NULL;
-				free_array2(new_cmd);
-			}
+				do_check_acces(&head);
 		}
 		head = head->next;
 	}
 }
 
-void	free_array(char **str)
+int	check_access2(char	**split_path, char	**new_check)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		free(str[i]);
-		str[i] = NULL;
-		i++;	
-	}
-	if (str)
-		free(str);
-	str = NULL;
-}
-
-int	check_access(char *check)
-{
-	char	**new_check;
-	char	**split_path;
-	char	*path;
+	char	*tmp;
 	char	*join;
 	int		i;
 
 	i = -1;
-	new_check = ft_split(check, ' ');
-	path = find_path();
-	if (!path)
-		return (0);
-	split_path = ft_split(path, ':');
 	while (split_path[++i])
 	{
 		join = ft_strjoin(split_path[i], "/");
-		join = ft_strjoin(join, new_check[0]);
+		tmp = ft_strdup(join);
+		ft_free(join);
+		join = ft_strjoin(tmp, new_check[0]);
+		if (tmp)
+			ft_free(tmp);
+		tmp = NULL;
 		if (access(join, F_OK | X_OK) == 0)
 			return (free_array(split_path),
 				free_array(new_check), ft_free(join), 1);
@@ -124,4 +79,20 @@ int	check_access(char *check)
 		join = NULL;
 	}
 	return (free_array(split_path), free_array(new_check), 0);
+}
+
+int	check_access(char *check)
+{
+	char	**new_check;
+	char	**split_path;
+	char	*path;
+
+	new_check = ft_split_white_spc(check, " \t\v\n\r\f");
+	path = find_path();
+	if (!path)
+		return (free_array(new_check), 0);
+	split_path = ft_split(path, ':');
+	if (check_access2(split_path, new_check))
+		return (1);
+	return (0);
 }

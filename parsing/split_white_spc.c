@@ -6,7 +6,7 @@
 /*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 19:21:01 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/05 22:45:48 by isidki           ###   ########.fr       */
+/*   Updated: 2023/09/06 01:47:05 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,12 @@ char	**ft_split_white_spc(char *str, char *charset)
 {
 	char	**strings;
 	int		i;
-	int 	j;
+	int		j;
 
 	i = 0;
 	j = 0;
-	strings = (char **)ft_malloc(sizeof(char *)
-			* (count_strings(str, charset) + 1));
+	strings = (char **)ft_calloc(sizeof(char *),
+			(count_strings(str, charset) + 1));
 	while (str[i] != '\0')
 	{
 		while (str[i] != '\0' && check_separator(str[i], charset))

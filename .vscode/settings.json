@@ -27,6 +27,7 @@
         "istream": "c",
         "utility": "c",
         "sstream": "c",
-        "minishell.h": "c"
+        "minishell.h": "c",
+        "ostream": "c"
     }
 }

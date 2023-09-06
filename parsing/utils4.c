@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils4.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 03:19:15 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 03:21:28 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/06 01:51:16 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	*ft_malloc(size_t size)
 	if (!allocated)
 	{
 		write(2, "malloc error!\n", 14);
-		exit(1); //call ft_exit
+		exit(1);
 	}
 	last = get_garbage_collector();
 	while (last->next)

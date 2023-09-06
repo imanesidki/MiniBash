@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 SRCS =	main.c		\
-		execution/minishell.c			\
+		execution/minishell.c	\
 		execution/exec_path.c	\
 		execution/split.c		\
 		execution/minishell_utils.c	\
@@ -42,15 +42,16 @@ SRCS =	main.c		\
 		execution/builtins_utils.c			\
 		execution/builtins_utils2.c	\
 		execution/key_and_value.c			\
-		execution/builtins_utils_ex.c			\
-		execution/export_list.c			\
-		execution/pipe.c			\
+		execution/builtins_utils_ex.c		\
+		execution/export_list.c		\
+		execution/pipe.c	\
 		parsing/split_ls.c	\
-		parsing/split_white_spc.c
+		parsing/split_white_spc.c \
+		parsing/free_array.c
 
 READLINE = $(shell brew --prefix readline)
 NAME = mini.a
-FLAGS = -Wall -Werror -Wextra -I$(READLINE)/include 
+FLAGS = -Wall -Werror -Wextra -I$(READLINE)/include
 %.o : %.c minishell.h
 	@echo "Compiling: $<"
 	@cc $(FLAGS)  -c $< -o $@

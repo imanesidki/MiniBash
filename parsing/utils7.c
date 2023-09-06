@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils7.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 03:28:00 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 03:30:13 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/06 01:51:24 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	handle_dqu(t_lexer *temp, t_lexer *hold, t_token tok)
 		return (1);
 	}
 	else if (hold != temp && hold)
-		concat_between_qu(hold, temp, tok); //hold is first elm after '\"' and temp is the closing '\"'
+		concat_between_qu(hold, temp, tok);
 	return (0);
 }
 
