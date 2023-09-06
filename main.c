@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/06 01:46:14 by isidki           ###   ########.fr       */
+/*   Updated: 2023/09/06 14:47:47 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	shell_level(void)
 	}
 }
 
-int	main_init(char **env, int ac)
+int	main_init(char **env, int ac, char **av)
 {
 	char	*test;
 
@@ -43,6 +43,7 @@ int	main_init(char **env, int ac)
 		ft_putstr_fd(2, "minishell: No such file or directory\n");
 		return (-1);
 	}
+	(void)av;
 	test = malloc(1);
 	if (!test)
 		exit(1);
@@ -76,30 +77,46 @@ void	clear_env(void)
 		g_glb.env = g_glb.env->next;
 	}
 }
+void	ft_close_fd()
+{
+	int fd;
+
+	fd = 3;
+	while (fd <= 20)
+	{
+		if (fstat(fd, NULL) == -1)
+		{
+			close(fd);
+		}
+		fd++;
+	}
+}
 
 int	main(int ac, char **av, char **env)
 {
 	char	*input;
 	t_cmd	*cmd;
 
-	(void) av;
-	if (main_init(env, ac) == -1)
+	if (main_init(env, ac, av) == -1)
 		return (1);
 	while (1)
 	{
-		rl_catch_signals = 0;
 		ft_signal();
 		input = readline("minishell$ ");
 		if (protection_input(input))
 			continue ;
-		if (input)
-			add_history(input);
+		add_history(input);
 		cmd = parsing(input);
 		if (cmd == NULL)
+		{
+			ft_close_fd();
 			continue ;
+		}
 		split_ls(&cmd);
-		if (cmd && cmd->cmd && cmd->cmd[0])
+		if (cmd->cmd && cmd->cmd[0])
 			execution_and_redirection(cmd);
+		else
+			close(cmd->fd[0]);
 		ft_lstclear_cmd(&cmd);
 	}
 	return (clear_history(), clear_env(), 0);

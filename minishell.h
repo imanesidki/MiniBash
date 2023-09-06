@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:45:09 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/06 01:52:16 by isidki           ###   ########.fr       */
+/*   Updated: 2023/09/06 14:35:53 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ struct s_garbage
 
 t_glb						g_glb;
 
-/*************************************************/
 t_cmd		*ft_lstnew_1(void *content, t_cmd *data);
 t_env		*ft_lstnew_2(void *content, void *key, void *value);
 void		clear_env(void);
@@ -155,12 +154,10 @@ int			execution_and_redirection(t_cmd *data);
 void		ft_process(t_cmd *data, int fd[2]);
 void		exit_cmd(t_cmd *data);
 int			ft_atoi(char *str);
-/*************************************************/
-int			main_init(char **env, int ac);
+int			main_init(char **env, int ac, char **av);
 int			protection_input(char *input);
 t_token		which_token(char c1, char c2);
 void		assign_tok(t_lexer *tmp, t_token *tok);
-// void		ft_lstclear_garbage(t_garbage **lst);
 void		ft_lstadd_back_garbage(t_garbage **lst, t_garbage *new);
 void		ft_change_dlr_word(t_lexer **head);
 t_garbage	*ft_lstnew_garbage(void *ptr);
@@ -251,4 +248,5 @@ void		free_array2(char **str);
 void		free_array(char **str);
 int			check_separator(char c, char *charset);
 int			check_access2(char	**split_path, char	**new_check);
+void		ft_close_fd(void);
 #endif

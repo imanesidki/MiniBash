@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   her_doc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 03:42:42 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 16:08:45 by isidki           ###   ########.fr       */
+/*   Updated: 2023/09/06 14:28:30 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	ft_readline_herdc(t_lexer **loop, t_lexer *tmp, int *fd_return)
 	}
 	free(line);
 	if (g_glb.sg == 1)
-		return (-1);
+		return (close(fds[1]), close(fds[0]), -1);
 	return (g_glb.dqu = 0, close(fds[1]), *fd_return = fds[0], 0);
 }
 
