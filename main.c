@@ -6,7 +6,7 @@
 /*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/06 18:12:13 by isidki           ###   ########.fr       */
+/*   Updated: 2023/09/06 18:24:17 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,12 @@ void	shell_level(void)
 	{
 		if (!ft_strcmp(head->key, "SHLVL"))
 		{
-			if (!head->value)
+			i = ft_atoi(head->value);
+			i++;
+			if (i > 999 || i < 0)
 				head->value = ft_itoa(2);
 			else
-			{
-				i = ft_atoi(head->value);
-				i++;
-				if (i > 999 || i < 0)
-					head->value = ft_itoa(2);
-				else
-					head->value = ft_itoa(i);
-			}
+				head->value = ft_itoa(i);
 			break ;
 		}
 		head = head->next;
