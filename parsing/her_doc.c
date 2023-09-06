@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 03:42:42 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/06 14:28:30 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/06 17:08:15 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	ft_heredoc(t_lexer **head)
 		if (tmp)
 		{
 			if (ft_readline_herdc(&loop, tmp, &fd_return) == -1)
-				return (-1);
+				return (g_glb.exit_status = 1, -1);
 			if (tmp->next)
 				loop = tmp->next;
 			else

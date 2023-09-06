@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/08/16 03:20:46 by osarsar           #+#    #+#              #
-#    Updated: 2023/08/16 03:20:46 by osarsar          ###   ########.fr        #
+#    Created: 2023/09/06 16:33:21 by osarsar           #+#    #+#              #
+#    Updated: 2023/09/06 16:33:21 by osarsar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,8 +51,11 @@ SRCS =	main.c		\
 		parsing/free_array.c
 
 READLINE = $(shell brew --prefix readline)
+
 NAME = mini.a
+
 FLAGS = -Wall -Werror -Wextra -I$(READLINE)/include
+
 %.o : %.c minishell.h
 	@echo "Compiling: $<"
 	@cc $(FLAGS)  -c $< -o $@

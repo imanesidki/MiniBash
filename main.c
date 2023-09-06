@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/06 15:43:43 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/06 17:20:58 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	main_init(char **env, int ac, char **av)
 		ft_putstr_fd(2, "minishell: No such file or directory\n");
 		return (-1);
 	}
+	if (isatty(STDIN_FILENO) == 0)
+		exit(1);
 	(void)av;
 	test = malloc(1);
 	if (!test)
