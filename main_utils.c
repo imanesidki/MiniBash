@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 15:33:37 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/06 17:05:21 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/06 18:05:12 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_close_fd(void)
 	int	fd;
 
 	fd = 3;
-	while (fd <= 20)
+	while (fd <= OPEN_MAX)
 	{
 		if (fstat(fd, NULL) == -1)
 		{

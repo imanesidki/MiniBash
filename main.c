@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/06 17:20:58 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/06 18:12:13 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,17 @@ void	shell_level(void)
 	{
 		if (!ft_strcmp(head->key, "SHLVL"))
 		{
-			i = ft_atoi(head->value);
-			i++;
-			if (i > 999 || i < 0)
+			if (!head->value)
 				head->value = ft_itoa(2);
 			else
-				head->value = ft_itoa(i);
+			{
+				i = ft_atoi(head->value);
+				i++;
+				if (i > 999 || i < 0)
+					head->value = ft_itoa(2);
+				else
+					head->value = ft_itoa(i);
+			}
 			break ;
 		}
 		head = head->next;

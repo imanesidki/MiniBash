@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_ex.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: isidki <isidki@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 00:53:28 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/05 12:39:39 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/06 18:17:48 by isidki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	unset_middle(t_cmd **data, t_env **env, int *m)
 void	unset_last_ex(t_cmd **data, t_env **env)
 {
 	if (*(*data)->cmd && (*env)->key
+		&& (*env)->next && (*env)->next->key
 		&& !ft_strcmp(*(*data)->cmd, (*env)->next->key))
 		unset_last(&(*data), env);
 	else
