@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:45:09 by osarsar           #+#    #+#             */
-/*   Updated: 2023/09/06 14:35:53 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/06 15:43:58 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,4 +249,5 @@ void		free_array(char **str);
 int			check_separator(char c, char *charset);
 int			check_access2(char	**split_path, char	**new_check);
 void		ft_close_fd(void);
+void		exec_cmd(t_cmd *cmd);
 #endif

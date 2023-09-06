@@ -1,2 +1,0 @@
-CTRL C close all fd
-close fd in case we don't have a commad after heredoc

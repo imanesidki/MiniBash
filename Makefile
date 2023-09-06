@@ -11,6 +11,7 @@
 # **************************************************************************** #
 
 SRCS =	main.c		\
+		main_utils.c	\
 		execution/minishell.c	\
 		execution/exec_path.c	\
 		execution/split.c		\

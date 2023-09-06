@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/06 19:19:53 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/06 13:54:43 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/06 15:37:52 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ void	ft_lstclear_cmd(t_cmd **lst)
 				ft_free(*l->cmd++);
 			ft_free(l->cmd);
 		}
-		if(l->fd_in > 2)
+		if (l->fd_in > 2)
 			close(l->fd_in);
-		if(l->fd_out > 2)
+		if (l->fd_out > 2)
 			close(l->fd_out);
 		ft_free (l);
 	}

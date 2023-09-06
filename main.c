@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:22:35 by isidki            #+#    #+#             */
-/*   Updated: 2023/09/06 14:47:47 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/09/06 15:43:43 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,29 +69,6 @@ int	protection_input(char *input)
 	return (0);
 }
 
-void	clear_env(void)
-{
-	while (g_glb.env)
-	{
-		free(g_glb.env);
-		g_glb.env = g_glb.env->next;
-	}
-}
-void	ft_close_fd()
-{
-	int fd;
-
-	fd = 3;
-	while (fd <= 20)
-	{
-		if (fstat(fd, NULL) == -1)
-		{
-			close(fd);
-		}
-		fd++;
-	}
-}
-
 int	main(int ac, char **av, char **env)
 {
 	char	*input;
@@ -112,12 +89,7 @@ int	main(int ac, char **av, char **env)
 			ft_close_fd();
 			continue ;
 		}
-		split_ls(&cmd);
-		if (cmd->cmd && cmd->cmd[0])
-			execution_and_redirection(cmd);
-		else
-			close(cmd->fd[0]);
-		ft_lstclear_cmd(&cmd);
+		exec_cmd(cmd);
 	}
 	return (clear_history(), clear_env(), 0);
 }
